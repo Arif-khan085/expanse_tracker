@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^5.6.7
   shared_preferences: ^2.5.3
   http: ^1.4.0
+  loading_indicator: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +67,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - res/assets/
+assets:
+  - res/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
