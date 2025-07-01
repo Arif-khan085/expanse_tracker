@@ -12,6 +12,6 @@ class SplashServices{
 
   void isLogin(){
 
-    Timer(Duration(seconds: 6),()=>Get.toNamed(RoutesName.loginView));
+    Timer(Duration(seconds: 2),()=>Get.toNamed(RoutesName.loginView));
   }
 }

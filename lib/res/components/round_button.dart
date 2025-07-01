@@ -1,31 +1,30 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../colors/app_colors.dart';
 
 class RoundButton extends StatelessWidget {
-
   const RoundButton({
-    Key?key,
-    this.buttonColor = AppColors.whiteColor,
-    this.textColor = AppColors.whiteColor,
+    super.key,
+    required this.buttonColor,
+    required this.textColor,
     required this.title,
     required this.onPress,
-    this.width = 100,
-    this.height = 50,
+    this.width = 80,
+    this.height = 55,
     this.loading = false,
-  }):super(key: key);
+    required this.color,
+  });
+  final Color color;
   final bool loading;
   final String title;
-  final double height,width;
+  final double height, width;
   final VoidCallback onPress;
-  final Color textColor,buttonColor;
+  final Color textColor;
+  final Color buttonColor;
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10,right: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: InkWell(
         onTap: onPress,
         child: Container(
@@ -34,49 +33,14 @@ class RoundButton extends StatelessWidget {
             color: buttonColor,
             borderRadius: BorderRadius.circular(50),
           ),
-          child: loading?
-          Center(child: CircularProgressIndicator()):
-          Center(child: Text(title)),
-        ),
-      ),
-    );
-  }
-}
-
-
-
-class RoundButtontwo extends StatelessWidget {
-
-  const RoundButtontwo({
-    Key?key,
-    this.buttonColor = AppColors.greyColor,
-    this.textColor = AppColors.backgroundColor,
-    required this.title,
-    required this.onPress,
-    this.width = 100,
-    this.height = 50,
-    this.loading = false,
-  }):super(key: key);
-  final bool loading;
-  final String title;
-  final double height,width;
-  final VoidCallback onPress;
-  final Color textColor,buttonColor;
-  @override
-  Widget build(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 10,right: 10),
-      child: InkWell(
-        onTap: onPress,
-        child: Container(
-          height: height,
-          decoration: BoxDecoration(
-            color: buttonColor,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: loading?
-          Center(child: CircularProgressIndicator()):
-          Center(child: Text(title)),
+          child: loading
+              ? Center(child: CircularProgressIndicator())
+              : Center(
+                  child: Text(
+                    title,
+                    style: TextStyle(color: AppColors.whiteColor),
+                  ),
+                ),
         ),
       ),
     );
