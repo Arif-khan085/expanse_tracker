@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import '../colors/app_colors.dart';
 
 class Accounts extends StatelessWidget {
-  const Accounts({
-    super.key,
-    required this.onPress,
-    required this.imagePath,
-  });
+  const Accounts({super.key, required this.onPress, required this.imagePath});
 
   final String imagePath; // ✅ Accept a string path instead of Image
   final VoidCallback onPress;
@@ -16,8 +12,8 @@ class Accounts extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-        height: 75,
-        width: 75,
+        height: 70,
+        width: 70,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(imagePath),

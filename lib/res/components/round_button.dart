@@ -5,6 +5,7 @@ import '../colors/app_colors.dart';
 class RoundButton extends StatelessWidget {
   const RoundButton({
     super.key,
+    required this.textStyle,
     required this.buttonColor,
     required this.textColor,
     required this.title,
@@ -14,6 +15,7 @@ class RoundButton extends StatelessWidget {
     this.loading = false,
     required this.color,
   });
+  final TextStyle textStyle;
   final Color color;
   final bool loading;
   final String title;
@@ -21,6 +23,7 @@ class RoundButton extends StatelessWidget {
   final VoidCallback onPress;
   final Color textColor;
   final Color buttonColor;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
