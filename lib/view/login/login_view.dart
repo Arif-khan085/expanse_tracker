@@ -1,6 +1,7 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:expense_tracker/res/components/round_button.dart';
 import 'package:expense_tracker/res/constants/accounts.dart';
+import 'package:expense_tracker/view/signup/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,9 @@ class _LoginViewState extends State<LoginView> {
             SizedBox(height: 20),
             RoundButton(
               title: 'Sign up',
-              onPress: () {},
+              onPress: () {
+                Get.to(SignUp());
+              },
               color: AppColors.whiteColor,
               textColor: AppColors.whiteColor,
               buttonColor: AppColors.cardColor,

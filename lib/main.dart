@@ -1,6 +1,6 @@
 import 'package:expense_tracker/res/routes/routes.dart';
 import 'package:expense_tracker/res/routes/routes_named.dart';
-import 'package:expense_tracker/view/home_screen.dart';
+
 import 'package:expense_tracker/view/login/login_view.dart';
 import 'package:expense_tracker/view/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

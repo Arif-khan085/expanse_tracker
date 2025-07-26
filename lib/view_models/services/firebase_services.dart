@@ -36,11 +36,13 @@ class AuthController extends GetxController {
         password: user.password!,
       );
       onSuccess();
-      Utils.toastMessage('Logged in Successfully');
+      Get.snackbar('Congrats', 'Logged in Successfully');
     } on FirebaseAuthException catch (e) {
-      Utils.toastMessage(e.message ?? 'Login Error');
+      Get.snackbar(
+          '!!!',
+          e.message ?? 'Login Error');
     } catch (e) {
-      Utils.toastMessage('Unexpected error accured');
+      Get.snackbar('Unexpected ', 'Unexpected error accured');
     } finally {
       isLoading.value = false;
     }
@@ -48,6 +50,8 @@ class AuthController extends GetxController {
 
   void signOutUser() async {
     await auth.signOut();
-    Utils.toastMessage("Signed out");
+    Get.snackbar('', 'Log Out');
   }
+
+
 }
