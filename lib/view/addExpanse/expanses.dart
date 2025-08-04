@@ -1,3 +1,4 @@
+import 'package:expense_tracker/res/components/add_expense_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +22,13 @@ class _ExpenseState extends State<Expense> {
       ),
       bottomNavigationBar: CustomNavigationBar(selectIndex: 1, onItemSelect: (int value) {  },),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          RowButtons(onPressed: (type){
+            showEntryDialog(context,type){
+
+            }
+          })
           
         ],
       ),
