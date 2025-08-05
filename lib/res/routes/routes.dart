@@ -5,10 +5,17 @@ import 'package:expense_tracker/view/profile/profile.dart';
 import 'package:get/get.dart';
 
 import '../../view/login/login_view.dart';
+import '../../view/signin/signin.dart';
 import '../../view/splash_screen.dart';
 
 class AppRoutes {
   static appRoutes() => [
+    GetPage(
+      name: RoutesName.login,
+      page: () =>SignIn(),
+      transitionDuration: Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
+    ),
     GetPage(
       name: RoutesName.splashScreen,
       page: () => SplashScreen(),
