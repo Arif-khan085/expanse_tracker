@@ -12,7 +12,7 @@ class AppRoutes {
   static appRoutes() => [
     GetPage(
       name: RoutesName.login,
-      page: () =>SignIn(),
+      page: () => SignIn(),
       transitionDuration: Duration(milliseconds: 250),
       transition: Transition.leftToRightWithFade,
     ),

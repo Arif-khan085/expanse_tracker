@@ -40,13 +40,22 @@ class CustomNavigationBar extends StatelessWidget {
       showSelectedLabels: true,
 
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home,size: 30,), label: 'Dashboard'),
-        BottomNavigationBarItem(icon: Icon(Icons.add,size: 30,), label: 'Add Expense'),
         BottomNavigationBarItem(
-          icon: Icon(Icons.analytics_outlined,size: 30,),
+          icon: Icon(Icons.home, size: 30),
+          label: 'Dashboard',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add, size: 30),
+          label: 'Add Expense',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.analytics_outlined, size: 30),
           label: 'Report',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.person,size: 30,), label: 'Profile'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person, size: 30),
+          label: 'Profile',
+        ),
       ],
     );
   }

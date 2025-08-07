@@ -69,8 +69,8 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         SizedBox(height: 20),
                         RoundTextField(
-                          validator: (value){
-                            if(value!.isEmpty){
+                          validator: (value) {
+                            if (value!.isEmpty) {
                               return 'plz Enter name';
                             }
                             return null;
@@ -84,8 +84,8 @@ class _SignUpState extends State<SignUp> {
                         ),
                         SizedBox(height: 20),
                         RoundTextField(
-                          validator: (value){
-                            if(value!.isEmpty){
+                          validator: (value) {
+                            if (value!.isEmpty) {
                               return 'Plz Enter Email';
                             }
                             return null;
@@ -99,8 +99,8 @@ class _SignUpState extends State<SignUp> {
                         ),
                         SizedBox(height: 20),
                         RoundTextField(
-                          validator: (value){
-                            if(value!.isEmpty){
+                          validator: (value) {
+                            if (value!.isEmpty) {
                               return 'plz Enter password';
                             }
                             return null;
@@ -121,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                               buttonColor: AppColors.backgroundColor,
                               title: 'SIGN UP',
                               onPress: () {
-                                if(_formkey.currentState!.validate()){
+                                if (_formkey.currentState!.validate()) {
                                   setState(() {
                                     loading = true;
                                   });
@@ -129,7 +129,7 @@ class _SignUpState extends State<SignUp> {
                                     email: emailController.text,
                                     password: passwordController.text,
                                   );
-                                  AuthController().registerUser(user, (){
+                                  AuthController().registerUser(user, () {
                                     setState(() {
                                       loading = false;
                                     });
@@ -138,7 +138,10 @@ class _SignUpState extends State<SignUp> {
                                 }
                               },
                               color: AppColors.whiteColor,
-                              textStyle: TextStyle(fontSize: 30,color: AppColors.whiteColor),
+                              textStyle: TextStyle(
+                                fontSize: 30,
+                                color: AppColors.whiteColor,
+                              ),
                             ),
                             SizedBox(height: 40),
                             Text("Already have an Account"),
@@ -149,7 +152,6 @@ class _SignUpState extends State<SignUp> {
                               child: Text(
                                 'Sign In',
                                 style: TextStyle(
-
                                   color: AppColors.blueColor,
                                   fontSize: 20,
                                 ),
