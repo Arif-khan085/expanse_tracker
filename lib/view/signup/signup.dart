@@ -119,7 +119,6 @@ class _SignUpState extends State<SignUp> {
                           children: [
                             RoundButton(
                               buttonColor: AppColors.backgroundColor,
-                              textColor: AppColors.whiteColor,
                               title: 'SIGN UP',
                               onPress: () {
                                 if(_formkey.currentState!.validate()){
@@ -139,7 +138,7 @@ class _SignUpState extends State<SignUp> {
                                 }
                               },
                               color: AppColors.whiteColor,
-                              textStyle: TextStyle(fontSize: 20),
+                              textStyle: TextStyle(fontSize: 30,color: AppColors.whiteColor),
                             ),
                             SizedBox(height: 40),
                             Text("Already have an Account"),
@@ -150,6 +149,7 @@ class _SignUpState extends State<SignUp> {
                               child: Text(
                                 'Sign In',
                                 style: TextStyle(
+
                                   color: AppColors.blueColor,
                                   fontSize: 20,
                                 ),

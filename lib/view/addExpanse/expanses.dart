@@ -1,5 +1,4 @@
-import 'package:expense_tracker/res/components/add_expense_button.dart';
-import 'package:expense_tracker/view/widgets/save_button.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +24,7 @@ class _ExpenseState extends State<Expense> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SaveButton(textStyle: TextStyle(color: AppColors.whiteColor,fontSize: 25), buttonColor: AppColors.backgroundColor, textColor: AppColors.whiteColor, title: 'Save', onPress: (){})
-          
+
         ],
       ),
     );

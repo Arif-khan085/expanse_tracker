@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../colors/app_colors.dart';
 
 class RoundButton extends StatelessWidget {
   const RoundButton({
     super.key,
     required this.textStyle,
     required this.buttonColor,
-    required this.textColor,
+
     required this.title,
     required this.onPress,
     this.width = 80,
@@ -21,7 +20,7 @@ class RoundButton extends StatelessWidget {
   final String title;
   final double height, width;
   final VoidCallback onPress;
-  final Color textColor;
+
   final Color buttonColor;
 
   @override
@@ -41,7 +40,6 @@ class RoundButton extends StatelessWidget {
               : Center(
                   child: Text(
                     title,
-                    style: TextStyle(color: AppColors.whiteColor),
                   ),
                 ),
         ),

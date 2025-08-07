@@ -105,7 +105,7 @@ class _SignInState extends State<SignIn> {
                             RoundButton(
                               loading: loading,
                               buttonColor: AppColors.backgroundColor,
-                              textColor: AppColors.whiteColor,
+
                               title: 'SIGN IN',
                               onPress: () {
                                 if (_formkey.currentState!.validate()) {

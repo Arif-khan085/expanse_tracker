@@ -49,9 +49,9 @@ class _LoginViewState extends State<LoginView> {
                 Get.to(SignIn());
               },
               color: AppColors.blackColor,
-              textColor: AppColors.whiteColor,
               buttonColor: AppColors.greyColor,
-              textStyle: TextStyle(fontSize: 30),
+              textStyle: TextStyle(fontSize: 40,color:AppColors.blackColor
+              ),
             ),
             SizedBox(height: 20),
             RoundButton(
@@ -60,9 +60,8 @@ class _LoginViewState extends State<LoginView> {
                 Get.to(SignUp());
               },
               color: AppColors.whiteColor,
-              textColor: AppColors.whiteColor,
               buttonColor: AppColors.cardColor,
-              textStyle: TextStyle(fontSize: 30),
+              textStyle: TextStyle(fontSize: 30,color: AppColors.blackColor),
             ),
             SizedBox(height: 100),
             Text(
