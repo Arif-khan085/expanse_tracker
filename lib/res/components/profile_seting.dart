@@ -16,9 +16,24 @@ class ProfileTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12), // spacing between tiles
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // set your desired background color
+          borderRadius: BorderRadius.circular(12), // round corners
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0), // subtle shadow
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           leading: leadingIcon,
           title: Text(
             title,
@@ -27,8 +42,7 @@ class ProfileTile extends StatelessWidget {
           trailing: trailingIcon,
           onTap: onTap,
         ),
-        const Divider(height: 1),
-      ],
+      ),
     );
   }
 }
