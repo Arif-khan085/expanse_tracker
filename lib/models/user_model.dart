@@ -1,10 +1,11 @@
 class UserModel {
+  String? name;
   String? email;
   String? password;
   String? confirmPassword;
   String? id;
 
-  UserModel({this.email, this.password, this.confirmPassword, this.id});
+  UserModel({this.email, this.password, this.confirmPassword, this.id, required String name});
 
   // From JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -12,7 +13,7 @@ class UserModel {
       email: json['email'],
       password: json['password'],
       confirmPassword: json['confirmPassword'],
-      id: json['id'],
+      id: json['id'], name: '',
     );
   }
 
@@ -37,7 +38,7 @@ class UserModel {
       email: email ?? this.email,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
-      id: id ?? this.id,
+      id: id ?? this.id, name: '',
     );
   }
 }

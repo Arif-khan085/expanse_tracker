@@ -37,8 +37,18 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image(
+                    image: AssetImage('assets/images/my.jpeg',),
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+                ),
+              ),
               SizedBox(height: screenHeight * 0.02),
               Stack(
+                clipBehavior: Clip.none,
                 children: [
                   CircleAvatar(
                     radius: screenWidth * 0.15,

@@ -1,6 +1,5 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:expense_tracker/res/components/buttomnavigatorbar.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

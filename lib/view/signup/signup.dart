@@ -6,7 +6,6 @@ import 'package:expense_tracker/view/signin/signin.dart';
 import 'package:expense_tracker/view_models/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../homescreen/homescreen.dart';
 
@@ -21,22 +20,24 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool loading = false;
+
+  // 👁️ Password visibility state
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(left: 10, top: 10),
               child: Text(
-                'Create Your\n Account',
+                'Create Your\nAccount',
                 style: TextStyle(fontSize: 40, color: AppColors.whiteColor),
               ),
             ),
@@ -47,10 +48,9 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
@@ -62,104 +62,136 @@ class _SignUpState extends State<SignUp> {
                     vertical: 20,
                   ),
                   child: Form(
-                    key: _formkey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 20),
-                        RoundTextField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'plz Enter name';
-                            }
-                            return null;
-                          },
-                          controller: nameController,
-                          labelText: 'name',
-                          hintText: 'Enter Name',
-                          prefixIcon: Icons.person,
-                          obscureText: false,
-                          keyboardType: TextInputType.text,
-                        ),
-                        SizedBox(height: 20),
-                        RoundTextField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Plz Enter Email';
-                            }
-                            return null;
-                          },
-                          controller: emailController,
-                          labelText: 'Email',
-                          hintText: 'Enter Email',
-                          prefixIcon: Icons.email,
-                          obscureText: false,
-                          keyboardType: TextInputType.text,
-                        ),
-                        SizedBox(height: 20),
-                        RoundTextField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'plz Enter password';
-                            }
-                            return null;
-                          },
-                          controller: passwordController,
-                          labelText: 'Password',
-                          hintText: 'Enter Password',
-                          prefixIcon: Icons.password,
-                          obscureText: true,
-                          keyboardType: TextInputType.text,
-                        ),
-                        SizedBox(height: 50),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            RoundButton(
-                              buttonColor: AppColors.backgroundColor,
-                              title: 'SIGN UP',
-                              onPress: () {
-                                if (_formkey.currentState!.validate()) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  final user = UserModel(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                  );
-                                  AuthController().registerUser(user, () {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    Get.to(HomeScreen());
-                                  });
-                                }
-                              },
-                              color: AppColors.whiteColor,
-                              textStyle: TextStyle(
-                                fontSize: 30,
-                                color: AppColors.whiteColor,
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+
+                          // NAME
+                          RoundTextField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your name';
+                              }
+                              if (value.length < 3) {
+                                return 'Name must be at least 3 characters';
+                              }
+                              return null;
+                            },
+                            controller: nameController,
+                            labelText: 'Name',
+                            hintText: 'Enter Your Name',
+                            prefixIcon: Icons.person,
+                            obscureText: false, // 🚀 Name is visible
+                            keyboardType: TextInputType.name,
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // EMAIL
+                          RoundTextField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter email';
+                              }
+                              if (!value.contains('@')) {
+                                return 'Enter a valid email';
+                              }
+                              return null;
+                            },
+                            controller: emailController,
+                            labelText: 'Email',
+                            hintText: 'Enter Email',
+                            prefixIcon: Icons.email,
+                            obscureText: false,
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          const SizedBox(height: 20),
+
+                          // PASSWORD WITH EYE ICON
+                          RoundTextField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter password';
+                              }
+                              if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                            controller: passwordController,
+                            labelText: 'Password',
+                            hintText: 'Enter Password',
+                            prefixIcon: Icons.lock,
+                            obscureText: _obscurePassword,
+                            keyboardType: TextInputType.text,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
                               ),
-                            ),
-                            SizedBox(height: 40),
-                            Text("Already have an Account"),
-                            TextButton(
                               onPressed: () {
-                                Get.to(SignIn());
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
                               },
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  color: AppColors.blueColor,
-                                  fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+
+                          // SIGN UP BUTTON
+                          RoundButton(
+                            title: loading ? "Signing Up..." : "SIGN UP",
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.whiteColor,
+                            ),
+                            color: AppColors.backgroundColor,
+                            onPress: () {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() => loading = true);
+
+                                final user = UserModel(
+                                  name: nameController.text.trim(),
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                );
+
+                                AuthController().registerUser(user, () {
+                                  setState(() => loading = false);
+                                  Get.offAll(() => const HomeScreen());
+                                });
+                              }
+                            },
+                            buttonColor: AppColors.backgroundColor,
+                          ),
+
+                          const SizedBox(height: 40),
+
+                          // ALREADY HAVE ACCOUNT
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Already have an account?"),
+                              TextButton(
+                                onPressed: () {
+                                  Get.to(() => const SignIn());
+                                },
+                                child: Text(
+                                  'Sign In',
+                                  style: TextStyle(
+                                    color: AppColors.blueColor,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

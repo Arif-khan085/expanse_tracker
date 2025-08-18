@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundTextField extends StatelessWidget {
@@ -9,6 +8,8 @@ class RoundTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
+  final IconButton? suffixIcon; // 👁️ optional eye icon
+
   const RoundTextField({
     super.key,
     required this.controller,
@@ -18,22 +19,28 @@ class RoundTextField extends StatelessWidget {
     required this.obscureText,
     required this.keyboardType,
     this.validator,
+    this.suffixIcon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          prefixIcon: Icon(prefixIcon),
-          hintText: hintText,
-          labelText: labelText,
+    return Column(
+      children: [
+        TextFormField(
+          validator: validator,
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            prefixIcon: Icon(prefixIcon),
+            hintText: hintText,
+            labelText: labelText,
+            suffixIcon: suffixIcon,
+            border: InputBorder.none, // 🚀 same as SignIn
+          ),
         ),
-      ),
+        const Divider(), // underline instead of border
+      ],
     );
   }
 }
