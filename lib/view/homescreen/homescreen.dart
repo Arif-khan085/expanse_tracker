@@ -92,14 +92,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         vertical: 10,
                       ),
                       child: ListTile(
-                        title: Text(exp['title'] ?? 'No Title',style: TextStyle(fontSize: 20),),
+                        title: Text(
+                          exp['title'] ?? 'No Title',
+                          style: TextStyle(fontSize: 20),
+                        ),
                         subtitle: Text(
                           "Category : ${exp['category']}\nPayment : ${exp['payment']} \nDate : ${exp['date']}",
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("Rs ${exp['amount']}",style:TextStyle(fontSize: 15),),
+                            Text(
+                              "Rs ${exp['amount']}",
+                              style: TextStyle(fontSize: 15),
+                            ),
                             IconButton(
                               onPressed: () {
                                 expenseController.deleteExpense(
