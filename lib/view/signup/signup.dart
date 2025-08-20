@@ -26,6 +26,7 @@ class _SignUpState extends State<SignUp> {
   // 👁️ Password visibility state
   bool _obscurePassword = true;
 
+  final AuthController controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,10 +146,7 @@ class _SignUpState extends State<SignUp> {
                           // SIGN UP BUTTON
                           RoundButton(
                             title: loading ? "Signing Up..." : "SIGN UP",
-                            textStyle: TextStyle(
-                              fontSize: 20,
-                              color: AppColors.whiteColor,
-                            ),
+
                             color: AppColors.backgroundColor,
                             onPress: () {
                               if (_formKey.currentState!.validate()) {
@@ -159,11 +157,11 @@ class _SignUpState extends State<SignUp> {
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
-
-                                AuthController().registerUser(user, () {
+                                controller.registerUser(user, () {
                                   setState(() => loading = false);
-                                  Get.offAll(() => const HomeScreen());
+
                                 });
+                                Get.offAll(() => const HomeScreen());
                               }
                             },
                             buttonColor: AppColors.backgroundColor,

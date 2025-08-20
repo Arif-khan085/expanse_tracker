@@ -96,8 +96,9 @@ class _SignInState extends State<SignIn> {
                         RoundTextField(
                           validator: (value) {
                             if (value!.isEmpty) return 'Please enter password';
-                            if (value.length < 6)
+                            if (value.length < 6) {
                               return 'Password must be at least 6 characters';
+                            }
                             return null;
                           },
                           controller: passwordController,
@@ -123,18 +124,19 @@ class _SignInState extends State<SignIn> {
                         const Divider(), // underline for password
                         const SizedBox(height: 50),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+
                           children: [
                             RoundButton(
                               loading: loading,
                               buttonColor: AppColors.backgroundColor,
                               title: 'SIGN IN',
+
                               onPress: () {
                                 if (_formkey.currentState!.validate()) {
                                   setState(() {
                                     loading = true;
                                   });
+
                                   final user = UserModel(
                                     email: emailController.text,
                                     password: passwordController.text,
@@ -144,27 +146,34 @@ class _SignInState extends State<SignIn> {
                                     setState(() {
                                       loading = false;
                                     });
-                                    Get.to(() => const HomeScreen());
+                                    Get.offAll(() => const HomeScreen());
                                   });
                                 }
                               },
+
                               color: AppColors.whiteColor,
-                              textStyle: const TextStyle(fontSize: 20),
+
                             ),
                             const SizedBox(height: 40),
-                            const Text("Don't have an Account"),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(() => const SignUp());
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: AppColors.blueColor,
-                                  fontSize: 20,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Don't have an Account"),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.to(() => const SignUp());
+                                  },
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      color: AppColors.blueColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
+
                           ],
                         ),
                       ],

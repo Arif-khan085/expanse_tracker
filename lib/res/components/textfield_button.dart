@@ -8,7 +8,7 @@ class RoundTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
-  final IconButton? suffixIcon; // 👁️ optional eye icon
+  final Widget? suffixIcon; // 👁️ optional eye icon
 
   const RoundTextField({
     super.key,
@@ -16,7 +16,7 @@ class RoundTextField extends StatelessWidget {
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
-    required this.obscureText,
+    this.obscureText=false,
     required this.keyboardType,
     this.validator,
     this.suffixIcon,

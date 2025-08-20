@@ -40,10 +40,10 @@ class _ProfileState extends State<Profile> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image(
-                    image: AssetImage('assets/images/my.jpeg',),
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
+                  image: AssetImage('assets/images/my.jpeg'),
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
                 ),
               ),
               SizedBox(height: screenHeight * 0.02),

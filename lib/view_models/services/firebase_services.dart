@@ -1,18 +1,21 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/models/user_model.dart';
 import 'package:expense_tracker/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   RxBool isLoading = false.obs;
 
   // ✅ Register user
-  void registerUser(UserModel user, VoidCallback onSuccess) async {
+  Future<void> registerUser(UserModel user, VoidCallback onSuccess) async {
     isLoading.value = true;
     try {
       // Save the credential
@@ -28,21 +31,21 @@ class AuthController extends GetxController {
       onSuccess();
     } on FirebaseAuthException catch (e) {
       Utils.toastMessage(e.message ?? 'Register Error');
-    } catch (e) {
-      Utils.toastMessage('Unexpected error occurred');
-    } finally {
+    }
+     finally {
       isLoading.value = false;
     }
   }
 
   // ✅ Sign in user
-  void signInUser(UserModel user, VoidCallback onSuccess) async {
+  Future<void> signInUser(UserModel user, VoidCallback onSuccess) async {
     isLoading.value = true;
     try {
       await auth.signInWithEmailAndPassword(
         email: user.email!,
         password: user.password!,
       );
+
       onSuccess();
       Get.snackbar('Congrats', 'Logged in Successfully');
     } on FirebaseAuthException catch (e) {
@@ -55,28 +58,96 @@ class AuthController extends GetxController {
   }
 
   // ✅ Sign out user
-  void signOutUser() async {
+  Future<void> signOutUser() async {
     await auth.signOut();
     Get.snackbar('Logout', 'You have been logged out');
   }
 }
 
-// ✅ Save user to Firestore
 Future<void> saveUser(User user, {String? name}) async {
-  final ref = FirebaseFirestore.instance.collection('user').doc(user.uid);
+  try {
+    final ref = FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-  final snapshot = await ref.get();
-  if (!snapshot.exists) {
-    final fullName = name
-        ?? user.displayName?.trim()
-        ?? user.email?.split('@').first
-        ?? 'user_${user.uid.substring(0, 5)}';
+    final snapshot = await ref.get();
+    if (!snapshot.exists) {
+      final fullName = name
+          ?? user.displayName?.trim()
+          ?? user.email
+              ?.split('@')
+              .first
+          ?? 'user_${user.uid.substring(0, 5)}';
 
-    await ref.set({
-      'uid': user.uid,
-      'name': fullName,
-      'email': user.email ?? 'no email',
+      await ref.set({
+        'uid': user.uid,
+        'name': fullName,
+        'email': user.email ?? 'no email',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      debugPrint("✅ User saved to Firestore");
+    } else {
+      debugPrint("⚠️ User already exists in Firestore");
+    }
+  } catch (e) {
+    debugPrint("❌ Error saving user: $e");
+  }
+}
+
+
+// ✅ Add Expense
+final FirebaseAuth auth = FirebaseAuth.instance;
+final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+Future<void>addExpense({
+  required String title,
+  required double amount,
+  required String date,
+  required String category,
+  required String payment,
+})async {
+  try {
+    String uid = auth.currentUser!.uid;
+
+    // 👇 Create document reference for expense
+    DocumentReference expenseRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('expenses')
+        .doc(); // auto generate ID
+
+    // 👇 Save expense with expenseId + uid
+    await expenseRef.set({
+      'expenseId': expenseRef.id, // Save expense document ID
+      'uid': uid,                 // Save user UID
+      'title': title,
+      'amount': amount,
+      'date': date,
+      'category': category,
+      'payment': payment,
       'createdAt': FieldValue.serverTimestamp(),
     });
+
+    debugPrint("✅ Expense saved with ID: ${expenseRef.id}");
+    Get.snackbar('Success', 'Expense Added ✅');
+  } catch (e) {
+    Get.snackbar("Error", "Failed to add expense ❌ $e");
+    debugPrint("❌ Error adding expense: $e");
   }
+}
+
+class ExpenseController extends GetxController {
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
+
+Future<void>deleteExpense(String docId)async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('expenses')
+        .doc(docId)
+        .delete();
+    Get.snackbar('Success', 'Expense deleted successfully');
+  } catch (e) {
+    Get.snackbar("Error", e.toString());
+  }
+}
 }

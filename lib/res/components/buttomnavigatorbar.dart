@@ -20,7 +20,10 @@ class CustomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
       currentIndex: selectIndex,
+
       onTap: (index) {
         if (index == selectIndex) return;
         onItemSelect(index);
@@ -41,6 +44,7 @@ class CustomNavigationBar extends StatelessWidget {
 
       items: [
         BottomNavigationBarItem(
+
           icon: Icon(Icons.home, size: 30),
           label: 'Dashboard',
         ),
