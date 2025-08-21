@@ -19,7 +19,7 @@ class RowButtons extends StatelessWidget {
             foregroundColor: Colors.green.shade900,
           ),
         ),
-        SizedBox(width: 40,),
+        SizedBox(width: 40),
         ElevatedButton.icon(
           onPressed: () => onPressed('Expense'),
           icon: const Icon(Icons.remove, color: Colors.red),

@@ -23,10 +23,10 @@ class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
-  // 👁️ Password visibility state
   bool _obscurePassword = true;
 
   final AuthController controller = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +68,6 @@ class _SignUpState extends State<SignUp> {
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
-
-                          // NAME
                           RoundTextField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -84,16 +82,13 @@ class _SignUpState extends State<SignUp> {
                             labelText: 'Name',
                             hintText: 'Enter Your Name',
                             prefixIcon: Icons.person,
-                            obscureText: false, // 🚀 Name is visible
+                            obscureText: false,
                             keyboardType: TextInputType.name,
                           ),
-
                           const SizedBox(height: 20),
-
-                          // EMAIL
                           RoundTextField(
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Please enter email';
                               }
                               if (!value.contains('@')) {
@@ -109,11 +104,9 @@ class _SignUpState extends State<SignUp> {
                             keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 20),
-
-                          // PASSWORD WITH EYE ICON
                           RoundTextField(
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Please enter password';
                               }
                               if (value.length < 6) {
@@ -134,22 +127,19 @@ class _SignUpState extends State<SignUp> {
                                     : Icons.visibility,
                                 color: Colors.grey,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
+                              onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 50),
-
-                          // SIGN UP BUTTON
                           RoundButton(
                             title: loading ? "Signing Up..." : "SIGN UP",
-
                             color: AppColors.backgroundColor,
+                            buttonColor: AppColors.backgroundColor,
                             onPress: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState != null &&
+                                  _formKey.currentState!.validate()) {
                                 setState(() => loading = true);
 
                                 final user = UserModel(
@@ -157,27 +147,21 @@ class _SignUpState extends State<SignUp> {
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
+
                                 controller.registerUser(user, () {
                                   setState(() => loading = false);
-
+                                  Get.offAll(() => const HomeScreen());
                                 });
-                                Get.offAll(() => const HomeScreen());
                               }
                             },
-                            buttonColor: AppColors.backgroundColor,
                           ),
-
                           const SizedBox(height: 40),
-
-                          // ALREADY HAVE ACCOUNT
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text("Already have an account?"),
                               TextButton(
-                                onPressed: () {
-                                  Get.to(() => const SignIn());
-                                },
+                                onPressed: () => Get.to(() => const SignIn()),
                                 child: Text(
                                   'Sign In',
                                   style: TextStyle(

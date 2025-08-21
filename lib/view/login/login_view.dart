@@ -2,10 +2,8 @@ import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:expense_tracker/res/components/round_button.dart';
 import 'package:expense_tracker/res/constants/accounts.dart';
 import 'package:expense_tracker/view/signup/signup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../signin/signin.dart';
 
 class LoginView extends StatefulWidget {
@@ -16,7 +14,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +47,7 @@ class _LoginViewState extends State<LoginView> {
               },
               color: AppColors.blackColor,
               buttonColor: AppColors.greyColor,
-              textStyle: TextStyle(fontSize: 40,color:AppColors.blackColor
-              ),
+              textStyle: TextStyle(fontSize: 40, color: AppColors.blackColor),
             ),
             SizedBox(height: 20),
             RoundButton(
@@ -61,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
               },
               color: AppColors.whiteColor,
               buttonColor: AppColors.cardColor,
-              textStyle: TextStyle(fontSize: 30,color: AppColors.blackColor),
+              textStyle: TextStyle(fontSize: 30, color: AppColors.blackColor),
             ),
             SizedBox(height: 100),
             Text(

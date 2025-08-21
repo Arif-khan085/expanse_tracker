@@ -17,7 +17,10 @@ class ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12), // spacing between tiles
+      padding: const EdgeInsets.symmetric(
+        vertical: 6,
+        horizontal: 12,
+      ), // spacing between tiles
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white, // set your desired background color
@@ -35,10 +38,7 @@ class ProfileTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           leading: leadingIcon,
-          title: Text(
-            title,
-            style: const TextStyle(fontSize: 16),
-          ),
+          title: Text(title, style: const TextStyle(fontSize: 16)),
           trailing: trailingIcon,
           onTap: onTap,
         ),

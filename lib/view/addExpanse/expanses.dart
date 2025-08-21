@@ -2,7 +2,6 @@ import 'package:expense_tracker/res/components/textfield_button.dart';
 import 'package:expense_tracker/view_models/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
@@ -75,15 +74,21 @@ class _ExpenseState extends State<Expense> {
                 icon: Icon(Icons.date_range_outlined),
               ),
               controller: dateController,
-              labelText: 'Date',
+              labelText: 'yy-mm-dd',
               hintText: 'Enter Date',
               prefixIcon: Icons.date_range,
               keyboardType: TextInputType.datetime,
             ),
             SizedBox(height: 20),
             RoundTextField(
+              controller: categoryController,
+              labelText: 'Category',
+              hintText: 'Select category',
+              prefixIcon: Icons.category,
+              keyboardType: TextInputType.text,
               suffixIcon: DropdownButton<String>(
-                value: 'Food', // default selected value (optional)
+                value: 'Food',
+                  // default selected value (optional)
                 items:
                     [
                       'Food',
@@ -114,16 +119,19 @@ class _ExpenseState extends State<Expense> {
                   });
                 },
               ),
-              controller: categoryController,
-              labelText: 'Category',
-              hintText: 'Select category',
-              prefixIcon: Icons.category,
-              keyboardType: TextInputType.text,
+
             ),
             SizedBox(height: 20),
             RoundTextField(
+              controller: paymentController,
+              labelText: 'payment',
+              hintText: 'Select payment',
+              prefixIcon: Icons.payment,
+              keyboardType: TextInputType.text,
               suffixIcon: DropdownButton<String>(
-                value: 'Cash', // default selected value (optional)
+
+                value: 'Cash',
+                // default selected value (optional)
                 items:
                     [
                       'Cash',
@@ -154,11 +162,6 @@ class _ExpenseState extends State<Expense> {
                   });
                 },
               ),
-              controller: paymentController,
-              labelText: 'payment',
-              hintText: 'Select payment',
-              prefixIcon: Icons.payment,
-              keyboardType: TextInputType.text,
             ),
             SizedBox(height: 20),
             ElevatedButton(

@@ -16,7 +16,7 @@ class RoundTextField extends StatelessWidget {
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
-    this.obscureText=false,
+    this.obscureText = false,
     required this.keyboardType,
     this.validator,
     this.suffixIcon,

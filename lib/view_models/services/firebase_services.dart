@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/models/user_model.dart';
 import 'package:expense_tracker/utils/utils.dart';
@@ -31,8 +30,7 @@ class AuthController extends GetxController {
       onSuccess();
     } on FirebaseAuthException catch (e) {
       Utils.toastMessage(e.message ?? 'Register Error');
-    }
-     finally {
+    } finally {
       isLoading.value = false;
     }
   }
@@ -70,12 +68,11 @@ Future<void> saveUser(User user, {String? name}) async {
 
     final snapshot = await ref.get();
     if (!snapshot.exists) {
-      final fullName = name
-          ?? user.displayName?.trim()
-          ?? user.email
-              ?.split('@')
-              .first
-          ?? 'user_${user.uid.substring(0, 5)}';
+      final fullName =
+          name ??
+          user.displayName?.trim() ??
+          user.email?.split('@').first ??
+          'user_${user.uid.substring(0, 5)}';
 
       await ref.set({
         'uid': user.uid,
@@ -92,18 +89,17 @@ Future<void> saveUser(User user, {String? name}) async {
   }
 }
 
-
 // ✅ Add Expense
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-Future<void>addExpense({
+Future<void> addExpense({
   required String title,
   required double amount,
   required String date,
   required String category,
   required String payment,
-})async {
+}) async {
   try {
     String uid = auth.currentUser!.uid;
 
@@ -117,7 +113,7 @@ Future<void>addExpense({
     // 👇 Save expense with expenseId + uid
     await expenseRef.set({
       'expenseId': expenseRef.id, // Save expense document ID
-      'uid': uid,                 // Save user UID
+      'uid': uid, // Save user UID
       'title': title,
       'amount': amount,
       'date': date,
@@ -137,17 +133,37 @@ Future<void>addExpense({
 class ExpenseController extends GetxController {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
-Future<void>deleteExpense(String docId)async {
-  try {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('expenses')
-        .doc(docId)
-        .delete();
-    Get.snackbar('Success', 'Expense deleted successfully');
-  } catch (e) {
-    Get.snackbar("Error", e.toString());
+  Future<void> deleteExpense(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('expenses')
+          .doc(docId)
+          .delete();
+      Get.snackbar('Success', 'Expense deleted successfully');
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
   }
 }
+
+
+class EditController extends GetxController {
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
+
+  Future<void> updateExpense(String docId, Map<String, dynamic> data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('expenses')
+          .doc(docId)
+          .update(data);
+
+      Get.snackbar("Success", "Expense updated successfully");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 }

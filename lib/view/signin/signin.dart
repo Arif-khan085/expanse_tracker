@@ -124,7 +124,6 @@ class _SignInState extends State<SignIn> {
                         const Divider(), // underline for password
                         const SizedBox(height: 50),
                         Column(
-
                           children: [
                             RoundButton(
                               loading: loading,
@@ -152,7 +151,6 @@ class _SignInState extends State<SignIn> {
                               },
 
                               color: AppColors.whiteColor,
-
                             ),
                             const SizedBox(height: 40),
                             Row(
@@ -173,7 +171,6 @@ class _SignInState extends State<SignIn> {
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                       ],

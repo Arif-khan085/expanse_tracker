@@ -3,7 +3,6 @@ import 'package:expense_tracker/view/addExpanse/expanses.dart';
 import 'package:expense_tracker/view/homescreen/homescreen.dart';
 import 'package:expense_tracker/view/profile/profile.dart';
 import 'package:expense_tracker/view/report/report.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +43,6 @@ class CustomNavigationBar extends StatelessWidget {
 
       items: [
         BottomNavigationBarItem(
-
           icon: Icon(Icons.home, size: 30),
           label: 'Dashboard',
         ),
