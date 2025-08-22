@@ -19,10 +19,17 @@ class _SignInState extends State<SignIn> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
-  bool loading = false;
+   bool loading = false;
 
   // 👁️ Password visibility toggle
   bool _obscurePassword = true;
+
+  @override
+  void dispose(){
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,10 +133,9 @@ class _SignInState extends State<SignIn> {
                         Column(
                           children: [
                             RoundButton(
-                              loading: loading,
+                              loading: loading ,
                               buttonColor: AppColors.backgroundColor,
-                              title: 'SIGN IN',
-
+                              title: loading ? "Signing IN..." : "SIGN IN",
                               onPress: () {
                                 if (_formkey.currentState!.validate()) {
                                   setState(() {
@@ -142,14 +148,12 @@ class _SignInState extends State<SignIn> {
                                     name: '',
                                   );
                                   AuthController().signInUser(user, () {
-                                    setState(() {
-                                      loading = false;
-                                    });
+                                    setState(() => loading = false);
                                     Get.offAll(() => const HomeScreen());
                                   });
+
                                 }
                               },
-
                               color: AppColors.whiteColor,
                             ),
                             const SizedBox(height: 40),

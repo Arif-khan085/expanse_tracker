@@ -15,7 +15,7 @@ class Report extends StatefulWidget {
 
 class _ReportState extends State<Report> {
   Map<String, double> categoryTotals = {};
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {

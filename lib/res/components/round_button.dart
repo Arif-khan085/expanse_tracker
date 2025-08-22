@@ -1,6 +1,7 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 
+
 class RoundButton extends StatelessWidget {
   const RoundButton({
     super.key,
@@ -37,17 +38,17 @@ class RoundButton extends StatelessWidget {
           child: loading
               ? Center(child: CircularProgressIndicator())
               : Center(
-                  child: Text(
-                    title,
-                    style:
-                        textStyle ??
-                        TextStyle(
-                          fontSize: 18,
-                          color: AppColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: Text(
+              title,
+              style:
+              textStyle ??
+                  TextStyle(
+                    fontSize: 18,
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
+            ),
+          ),
         ),
       ),
     );

@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   filteredExpenses[index].id, // pass docId
                                   exp,                         // pass data
                                 );
-                              }, // ✅ this brace was missing earlier
+                              }, //
                               icon: const Icon(Icons.edit, color: Colors.blue),
                             ),
                           ],
@@ -153,8 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final titleController = TextEditingController(text: data['title']);
     final amountController =
     TextEditingController(text: data['amount'].toString());
-    final categoryController = TextEditingController(text: data['category']);
-    final paymentController = TextEditingController(text: data['payment']);
 
     final List<String>categories =[
       'Food',
@@ -243,11 +241,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 final updatedData = {
                   "title": titleController.text,
                   "amount": double.tryParse(amountController.text) ?? 0,
-                  "category": categoryController.text,
-                  "payment": paymentController.text,
+                  "category": selectedCategory,
+                  "payment": selectedPayment,
                   "updatedAt": DateTime.now(),
                 };
-
                 expenseController.updateExpense(docId, updatedData);
                 Navigator.pop(context);
               },

@@ -28,19 +28,19 @@ class CustomNavigationBar extends StatelessWidget {
         onItemSelect(index);
         switch (index) {
           case 0:
-            Get.to(HomeScreen());
+            Get.off(() => HomeScreen());
           case 1:
-            Get.to(Expense());
+            Get.off(() => Expense());
           case 2:
-            Get.to(Report());
+            Get.off(() => Report());
           case 3:
-            Get.to(Profile());
+            Get.off(()=>Profile());
+            break;
         }
       },
       selectedItemColor: AppColors.cardColor,
       unselectedItemColor: AppColors.blackColor,
       showSelectedLabels: true,
-
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home, size: 30),

@@ -39,7 +39,7 @@ class RoundTextField extends StatelessWidget {
             border: InputBorder.none, // 🚀 same as SignIn
           ),
         ),
-        const Divider(), // underline instead of border
+        Divider(), // underline instead of border
       ],
     );
   }

@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class UserModel {
   String? name;
   String? email;

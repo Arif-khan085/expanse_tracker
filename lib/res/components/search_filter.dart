@@ -1,5 +1,6 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchFilter extends StatelessWidget {
   final TextEditingController controller;
@@ -33,12 +34,12 @@ class SearchFilter extends StatelessWidget {
           border: InputBorder.none,
           suffixIcon: controller.text.isNotEmpty
               ? IconButton(
-                  icon: Icon(Icons.clear, color: AppColors.blackColor),
-                  onPressed: () {
-                    controller.clear();
-                    onChanged('');
-                  },
-                )
+            icon: Icon(Icons.clear, color: AppColors.blackColor),
+            onPressed: () {
+              controller.clear();
+              onChanged('');
+            },
+          )
               : null,
         ),
         onChanged: onChanged,
