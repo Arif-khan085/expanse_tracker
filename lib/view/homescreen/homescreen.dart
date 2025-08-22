@@ -7,7 +7,6 @@ import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
 import '../../res/components/search_filter.dart';
 import '../../view_models/services/expense/expanse.dart';
-import '../../view_models/services/firebase_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -156,8 +155,44 @@ class _HomeScreenState extends State<HomeScreen> {
     TextEditingController(text: data['amount'].toString());
     final categoryController = TextEditingController(text: data['category']);
     final paymentController = TextEditingController(text: data['payment']);
-    final dateController = TextEditingController(text: data['date']);
 
+    final List<String>categories =[
+      'Food',
+      'Transport',
+      'Shopping',
+      'Bills',
+      'Entertainment',
+      'Health',
+      'Education',
+      'Savings',
+      'Travel',
+      'Groceries',
+      'Rent',
+      'Salary',
+      'Utilities',
+      'Investments',
+      'Others',
+    ];
+    String selectedCategory = data['category'] ?? categories.first;
+
+    final List<String>payment = [
+      'Cash',
+      'Credit Card',
+      'Debit Card',
+      'Bank Transfer',
+      'MobileWallet',
+      'PayPal',
+      'GooglePay',
+      'ApplePay',
+      'EasyPaisa',
+      'JazzCash',
+      'Cheque',
+      'UPI',
+      'Cryptocurrency',
+      'Gift Card',
+      'Others',
+    ];
+    String selectedPayment = data['payment']??payment.first;
     showDialog(
       context: context,
       builder: (context) {
@@ -168,9 +203,33 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
                 TextField(controller: amountController, decoration: const InputDecoration(labelText: "Amount")),
-                TextField(controller: categoryController, decoration: const InputDecoration(labelText: "Category")),
-                TextField(controller: paymentController, decoration: const InputDecoration(labelText: "Payment")),
-                TextField(controller: dateController, decoration: const InputDecoration(labelText: "Date")),
+                DropdownButtonFormField<String>(
+                  value: selectedCategory,
+                    decoration: InputDecoration(labelText: "Category"),
+                    items: categories.map((String category){
+                  return DropdownMenuItem<String>(
+                    value: category,
+                      child: Text(category));
+                }).toList(),
+                    onChanged: (value){
+                    setState(() {
+                      selectedCategory = value!;
+                    });
+                }),
+                DropdownButtonFormField<String>(
+                  value: selectedPayment,
+                    decoration: InputDecoration(labelText: "Payment"),
+                    items: payment.map((String payment){
+                      return DropdownMenuItem<String>(
+                        value: payment,
+                          child: Text(payment));
+                    }).toList(),
+                    onChanged: (value){
+                    setState(() {
+                      selectedPayment=value!;
+                    });
+                    }),
+
               ],
             ),
           ),
@@ -186,7 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   "amount": double.tryParse(amountController.text) ?? 0,
                   "category": categoryController.text,
                   "payment": paymentController.text,
-                  "date": dateController.text,
                   "updatedAt": DateTime.now(),
                 };
 
