@@ -17,7 +17,7 @@ class ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         vertical: 6,
         horizontal: 12,
       ), // spacing between tiles
@@ -29,7 +29,7 @@ class ProfileTile extends StatelessWidget {
             BoxShadow(
               color: Colors.grey.withOpacity(0), // subtle shadow
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -38,7 +38,7 @@ class ProfileTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           leading: leadingIcon,
-          title: Text(title, style: const TextStyle(fontSize: 16)),
+          title: Text(title, style: TextStyle(fontSize: 16)),
           trailing: trailingIcon,
           onTap: onTap,
         ),

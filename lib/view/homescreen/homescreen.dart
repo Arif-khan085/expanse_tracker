@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_tracker/res/components/add_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   User? user;
   String? uid;
   final Expanse expenseController = Get.put(Expanse());
+
 
   @override
   void initState() {
@@ -56,6 +58,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            child: BalanceItem(
+                title: 'Balance', amount: 2000, color: AppColors.blueColor, icon: Icons.account_balance_wallet, height: 80,width: double.infinity,),
+          ),
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            child: Row(
+              children: [
+                Expanded(child: BalanceItem(title: 'Salery', amount: 500, color: AppColors.tealColor, icon: Icons.payment, height: 80, width: double.infinity)),
+                SizedBox(width: 10,),
+                Expanded(child: BalanceItem(title: 'Expense', amount: 600, color: AppColors.tealColor, icon: Icons.add, height: 80, width: double.infinity)),
+              ],
+            ),
+          ),
           // 🔎 Search bar
           SearchFilter(
             controller: searchController,
