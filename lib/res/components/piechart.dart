@@ -9,8 +9,8 @@ class CustomPieChart extends StatelessWidget {
   const CustomPieChart({
     super.key,
     required this.data,
-    this.centerSpaceRadius = 40,
-    this.sectionRadius = 60,
+    this.centerSpaceRadius = 80,
+    this.sectionRadius = 50,
   });
 
   @override
@@ -25,8 +25,8 @@ class CustomPieChart extends StatelessWidget {
             title: "${e.value.toInt()}%", // show percentage
             color: e.color,
             radius: sectionRadius,
-            titleStyle: const TextStyle(
-              fontSize: 14,
+            titleStyle: TextStyle(
+              fontSize: 11,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

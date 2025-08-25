@@ -36,7 +36,7 @@ class _SignUpState extends State<SignUp> {
         children: [
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(left: 10, top: 10),
+              padding: EdgeInsets.only(left: 10, top: 10),
               child: Text(
                 'Create Your\nAccount',
                 style: TextStyle(fontSize: 40, color: AppColors.whiteColor),
@@ -51,14 +51,14 @@ class _SignUpState extends State<SignUp> {
                   height: MediaQuery.of(context).size.height,
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
-                    borderRadius: const BorderRadius.only(
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding:  EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
@@ -67,7 +67,7 @@ class _SignUpState extends State<SignUp> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           RoundTextField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -85,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                             obscureText: false,
                             keyboardType: TextInputType.name,
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           RoundTextField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -103,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                             obscureText: false,
                             keyboardType: TextInputType.emailAddress,
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           RoundTextField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -132,7 +132,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 50),
+                           SizedBox(height: 50),
                           RoundButton(
                             title: loading ? "Signing Up..." : "SIGN UP",
                             color: AppColors.backgroundColor,
@@ -156,6 +156,16 @@ class _SignUpState extends State<SignUp> {
                             },
                           ),
                           const SizedBox(height: 40),
+                          RoundButton(
+                            buttonColor: AppColors.backgroundColor,
+                            title: Image.asset(
+                              height: 40,
+                              width: 40,
+                              'assets/images/google_logo.png',
+                            ),
+                            onPress: () {},
+                            color: AppColors.whiteColor,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

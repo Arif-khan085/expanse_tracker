@@ -96,8 +96,8 @@ class _SignInState extends State<SignIn> {
                           keyboardType: TextInputType.emailAddress,
                         ),
 
-                        const Divider(), // light underline instead of border
-                        const SizedBox(height: 20),
+                         Divider(), // light underline instead of border
+                         SizedBox(height: 20),
 
                         // 👁️ Password field with no border
                         RoundTextField(
@@ -128,14 +128,22 @@ class _SignInState extends State<SignIn> {
                             },
                           ),
                         ),
-                        const Divider(), // underline for password
-                        const SizedBox(height: 50),
+                        Divider(), // underline for password
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                onPressed: (){}, icon: Text('Forgot Password ?',style: TextStyle(color: AppColors.blueColor),)),
+                          ],
+                        ),
+                        SizedBox(height: 50),
                         Column(
                           children: [
                             RoundButton(
-                              loading: loading ,
                               buttonColor: AppColors.backgroundColor,
+                              color: AppColors.backgroundColor,
                               title: loading ? "Signing IN..." : "SIGN IN",
+
                               onPress: () {
                                 if (_formkey.currentState!.validate()) {
                                   setState(() {
@@ -154,9 +162,7 @@ class _SignInState extends State<SignIn> {
 
                                 }
                               },
-                              color: AppColors.whiteColor,
                             ),
-                            const SizedBox(height: 40),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

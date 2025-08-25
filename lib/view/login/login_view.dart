@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             SizedBox(height: 100),
             Text(
-              'Login With Social Media',
+              'Login With Google',
               style: TextStyle(
                 fontSize: 20,
                 color: AppColors.whiteColor,
@@ -74,27 +74,13 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Accounts(
                         onPress: () {
-                          // google
-                        },
-                        imagePath: 'assets/images/images.png',
-                      ),
-                      SizedBox(width: 10),
-                      Accounts(
-                        onPress: () {
-                          // instagram
-                        },
-                        imagePath: 'assets/images/insta.png',
-                      ),
-                      SizedBox(width: 10),
-                      Accounts(
-                        onPress: () {
-                          // facebook
+                          Get.to(SignUp());
                         },
                         imagePath: 'assets/images/google.png',
                       ),

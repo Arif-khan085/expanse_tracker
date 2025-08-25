@@ -17,7 +17,7 @@ class RoundButton extends StatelessWidget {
   final TextStyle? textStyle;
   final Color color;
   final bool loading;
-  final String title;
+  final dynamic title;
   final double height, width;
   final VoidCallback onPress;
 
@@ -38,7 +38,8 @@ class RoundButton extends StatelessWidget {
           child: loading
               ? Center(child: CircularProgressIndicator())
               : Center(
-            child: Text(
+            child: title is String
+            ? Text(
               title,
               style:
               textStyle ??
@@ -47,7 +48,8 @@ class RoundButton extends StatelessWidget {
                     color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                   ),
-            ),
+            )
+          :title,
           ),
         ),
       ),
