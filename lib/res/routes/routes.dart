@@ -43,5 +43,6 @@ class AppRoutes {
       page: () => Profile(),
       transition: Transition.leftToRight,
     ),
+
   ];
 }

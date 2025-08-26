@@ -1,6 +1,6 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class SearchFilter extends StatelessWidget {
   final TextEditingController controller;
@@ -17,8 +17,8 @@ class SearchFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.greyColor2,
         borderRadius: BorderRadius.circular(25),

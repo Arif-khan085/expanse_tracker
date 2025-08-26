@@ -56,111 +56,120 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: const Text('Home'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-            child: BalanceItem(
-                title: 'Balance', amount: 2000, color: AppColors.blueColor, icon: Icons.account_balance_wallet, height: 80,width: double.infinity,),
-          ),
-          Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-            child: Row(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: BalanceItem(title: 'Salery', amount: 500, color: AppColors.tealColor, icon: Icons.payment, height: 80, width: double.infinity)),
-                SizedBox(width: 10,),
-                Expanded(child: BalanceItem(title: 'Expense', amount: 600, color: AppColors.tealColor, icon: Icons.add, height: 80, width: double.infinity)),
+                ElevatedButton(onPressed: (){}, child: Text('Monthly')),
+                ElevatedButton(onPressed: (){}, child: Text('yearly')),
               ],
             ),
-          ),
-          // 🔎 Search bar
-          SearchFilter(
-            controller: searchController,
-            hintText: 'Search Title',
-            onChanged: (value) {
-              setState(() {
-                searchQuery = value.toLowerCase();
-              });
-            },
-          ),
-
-          // 📌 Expense list
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(uid)
-                  .collection('expenses')
-                  .orderBy('createdAt', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: Text('No Expense Found'));
-                }
-
-                final expenses = snapshot.data!.docs;
-
-                final filteredExpenses = expenses.where((expense) {
-                  var data = expense.data() as Map<String, dynamic>;
-                  final title = data['title']?.toString().toLowerCase() ?? '';
-                  return title.contains(searchQuery);
-                }).toList();
-
-                return ListView.builder(
-                  itemCount: filteredExpenses.length,
-                  itemBuilder: (context, index) {
-                    var exp = filteredExpenses[index].data() as Map<String, dynamic>;
-
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: ListTile(
-                        title: Text(
-                          exp['title'] ?? 'No Title',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        subtitle: Text(
-                          "Category: ${exp['category']}\n"
-                              "Payment: ${exp['payment']}\n"
-                              "Date: ${exp['date']}",
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Rs ${exp['amount']}",
-                              style: const TextStyle(fontSize: 15),
-                            ),
-
-                            // 🗑 Delete button
-                            IconButton(
-                              onPressed: () {
-                                expenseController.deleteExpense(
-                                  filteredExpenses[index].id,
-                                );
-                              },
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                            ),
-
-                            // ✏️ Edit button
-                            IconButton(
-                              onPressed: () {
-                                _showEditDialog(
-                                  filteredExpenses[index].id, // pass docId
-                                  exp,                         // pass data
-                                );
-                              }, //
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+            Expanded(child: BalanceItem(
+              title: 'Balance', amount: 2000, color: AppColors.blueColor, icon: Icons.add, )),
+            Row(
+              children: [
+                Expanded(child: BalanceItem(
+                  footerText: 'Enter Salery',
+                  title: 'Salery', amount: 2000, color: AppColors.tealColor, icon: Icons.save, )),
+                SizedBox(width: 5,),
+                Expanded(child: BalanceItem(
+                  footerIcons: [Icons.arrow_upward],
+                  title: 'Expense', amount: 2000, color: AppColors.blueColor, icon: Icons.exit_to_app, )),
+              ],
+            ),
+            SizedBox(height: 10,),
+            // 🔎 Search bar
+            SearchFilter(
+              controller: searchController,
+              hintText: 'Search Title',
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
               },
             ),
-          ),
-        ],
+
+            // 📌 Expense list
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(uid)
+                    .collection('expenses')
+                    .orderBy('createdAt', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: Text('No Expense Found'));
+                  }
+
+                  final expenses = snapshot.data!.docs;
+
+                  final filteredExpenses = expenses.where((expense) {
+                    var data = expense.data() as Map<String, dynamic>;
+                    final title = data['title']?.toString().toLowerCase() ?? '';
+                    return title.contains(searchQuery);
+                  }).toList();
+
+                  return ListView.builder(
+                    itemCount: filteredExpenses.length,
+                    itemBuilder: (context, index) {
+                      var exp = filteredExpenses[index].data() as Map<String, dynamic>;
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: ListTile(
+                          title: Text(
+                            exp['title'] ?? 'No Title',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          subtitle: Text(
+                            "Category: ${exp['category']}\n"
+                                "Payment: ${exp['payment']}\n"
+                                "Date: ${exp['date']}",
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Rs ${exp['amount']}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+
+                              // 🗑 Delete button
+                              IconButton(
+                                onPressed: () {
+                                  expenseController.deleteExpense(
+                                    filteredExpenses[index].id,
+                                  );
+                                },
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                              ),
+
+                              // ✏️ Edit button
+                              IconButton(
+                                onPressed: () {
+                                  _showEditDialog(
+                                    filteredExpenses[index].id, // pass docId
+                                    exp,                         // pass data
+                                  );
+                                }, //
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -219,30 +228,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
                 TextField(controller: amountController, decoration: const InputDecoration(labelText: "Amount")),
                 DropdownButtonFormField<String>(
-                  value: selectedCategory,
+                    value: selectedCategory,
                     decoration: InputDecoration(labelText: "Category"),
                     items: categories.map((String category){
-                  return DropdownMenuItem<String>(
-                    value: category,
-                      child: Text(category));
-                }).toList(),
+                      return DropdownMenuItem<String>(
+                          value: category,
+                          child: Text(category));
+                    }).toList(),
                     onChanged: (value){
-                    setState(() {
-                      selectedCategory = value!;
-                    });
-                }),
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                    }),
                 DropdownButtonFormField<String>(
-                  value: selectedPayment,
+                    value: selectedPayment,
                     decoration: InputDecoration(labelText: "Payment"),
                     items: payment.map((String payment){
                       return DropdownMenuItem<String>(
-                        value: payment,
+                          value: payment,
                           child: Text(payment));
                     }).toList(),
                     onChanged: (value){
-                    setState(() {
-                      selectedPayment=value!;
-                    });
+                      setState(() {
+                        selectedPayment=value!;
+                      });
                     }),
 
               ],
