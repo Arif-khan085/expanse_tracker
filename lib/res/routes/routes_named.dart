@@ -8,4 +8,6 @@ class RoutesName {
   static const String expense = '/expense_screen';
   static const String profile = '/home_screen';
   static const String report = '/home_screen';
+  static const String monthly = '/monthly_screen';
+  static const String yearly = '/yearly_screen';
 }

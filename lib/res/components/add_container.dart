@@ -1,4 +1,3 @@
-import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BalanceItem extends StatelessWidget {
@@ -23,12 +22,13 @@ class BalanceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 6, // shadow effect
+      elevation: 0, // shadow effect
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Container(
-        height: 220,
+        height: MediaQuery.of(context).size.height * 0.16,
+        //width:  screenWidth * 0.9,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: RadialGradient(
@@ -37,30 +37,23 @@ class BalanceItem extends StatelessWidget {
             radius: 0.8,
           ),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.3), width: 1),
-          color: color.withOpacity(0.05), // light background
+          border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
+          color: color.withValues(alpha: 0.05), // light background
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
+         crossAxisAlignment: CrossAxisAlignment.center,
+         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // ─── Top part ───
             Row(
               children: [
                 // Icon
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: color),
-                ),
                 const SizedBox(width: 16),
-
                 // Text content
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         title,
@@ -119,3 +112,11 @@ class BalanceItem extends StatelessWidget {
     );
   }
 }
+/*Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: color),
+                ),*/

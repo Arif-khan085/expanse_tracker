@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
-import '../../res/components/search_filter.dart';
 import '../../view_models/services/expense/expanse.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,12 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController searchController = TextEditingController();
-  String searchQuery = '';
   User? user;
   String? uid;
   final Expanse expenseController = Get.put(Expanse());
-
 
   @override
   void initState() {
@@ -57,40 +53,41 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Home'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
+            Expanded(
+              child: BalanceItem(
+                title: 'Balance',
+                amount: 2000,
+                color: AppColors.blueColor,
+                icon: Icons.add,
+              ),
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(onPressed: (){}, child: Text('Monthly')),
-                ElevatedButton(onPressed: (){}, child: Text('yearly')),
+                Expanded(
+                  child: BalanceItem(
+                    footerText: 'Enter Salary',
+                    title: 'Salary',
+                    amount: 2000,
+                    color: AppColors.tealColor,
+                    icon: Icons.save,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: BalanceItem(
+                    footerIcons: [Icons.arrow_upward],
+                    title: 'Expense',
+                    amount: 2000,
+                    color: AppColors.blueColor,
+                    icon: Icons.exit_to_app,
+                  ),
+                ),
               ],
             ),
-            Expanded(child: BalanceItem(
-              title: 'Balance', amount: 2000, color: AppColors.blueColor, icon: Icons.add, )),
-            Row(
-              children: [
-                Expanded(child: BalanceItem(
-                  footerText: 'Enter Salery',
-                  title: 'Salery', amount: 2000, color: AppColors.tealColor, icon: Icons.save, )),
-                SizedBox(width: 5,),
-                Expanded(child: BalanceItem(
-                  footerIcons: [Icons.arrow_upward],
-                  title: 'Expense', amount: 2000, color: AppColors.blueColor, icon: Icons.exit_to_app, )),
-              ],
-            ),
-            SizedBox(height: 10,),
-            // 🔎 Search bar
-            SearchFilter(
-              controller: searchController,
-              hintText: 'Search Title',
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value.toLowerCase();
-                });
-              },
-            ),
+            const SizedBox(height: 10),
 
             // 📌 Expense list
             Expanded(
@@ -108,16 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   final expenses = snapshot.data!.docs;
 
-                  final filteredExpenses = expenses.where((expense) {
-                    var data = expense.data() as Map<String, dynamic>;
-                    final title = data['title']?.toString().toLowerCase() ?? '';
-                    return title.contains(searchQuery);
-                  }).toList();
-
                   return ListView.builder(
-                    itemCount: filteredExpenses.length,
+                    itemCount: expenses.length,
                     itemBuilder: (context, index) {
-                      var exp = filteredExpenses[index].data() as Map<String, dynamic>;
+                      var exp = expenses[index].data() as Map<String, dynamic>;
 
                       return Card(
                         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -143,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               IconButton(
                                 onPressed: () {
                                   expenseController.deleteExpense(
-                                    filteredExpenses[index].id,
+                                    expenses[index].id,
                                   );
                                 },
                                 icon: const Icon(Icons.delete, color: Colors.red),
@@ -153,10 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               IconButton(
                                 onPressed: () {
                                   _showEditDialog(
-                                    filteredExpenses[index].id, // pass docId
-                                    exp,                         // pass data
+                                    expenses[index].id, // pass docId
+                                    exp,                // pass data
                                   );
-                                }, //
+                                },
                                 icon: const Icon(Icons.edit, color: Colors.blue),
                               ),
                             ],
@@ -177,10 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ✏️ Edit dialog
   void _showEditDialog(String docId, Map<String, dynamic> data) {
     final titleController = TextEditingController(text: data['title']);
-    final amountController =
-    TextEditingController(text: data['amount'].toString());
+    final amountController = TextEditingController(text: data['amount'].toString());
 
-    final List<String>categories =[
+    final List<String> categories = [
       'Food',
       'Transport',
       'Shopping',
@@ -199,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     String selectedCategory = data['category'] ?? categories.first;
 
-    final List<String>payment = [
+    final List<String> payment = [
       'Cash',
       'Credit Card',
       'Debit Card',
@@ -216,7 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'Gift Card',
       'Others',
     ];
-    String selectedPayment = data['payment']??payment.first;
+    String selectedPayment = data['payment'] ?? payment.first;
+
     showDialog(
       context: context,
       builder: (context) {
@@ -228,32 +219,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
                 TextField(controller: amountController, decoration: const InputDecoration(labelText: "Amount")),
                 DropdownButtonFormField<String>(
-                    value: selectedCategory,
-                    decoration: InputDecoration(labelText: "Category"),
-                    items: categories.map((String category){
-                      return DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(category));
-                    }).toList(),
-                    onChanged: (value){
-                      setState(() {
-                        selectedCategory = value!;
-                      });
-                    }),
+                  value: selectedCategory,
+                  decoration: const InputDecoration(labelText: "Category"),
+                  items: categories.map((String category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value!;
+                    });
+                  },
+                ),
                 DropdownButtonFormField<String>(
-                    value: selectedPayment,
-                    decoration: InputDecoration(labelText: "Payment"),
-                    items: payment.map((String payment){
-                      return DropdownMenuItem<String>(
-                          value: payment,
-                          child: Text(payment));
-                    }).toList(),
-                    onChanged: (value){
-                      setState(() {
-                        selectedPayment=value!;
-                      });
-                    }),
-
+                  value: selectedPayment,
+                  decoration: const InputDecoration(labelText: "Payment"),
+                  items: payment.map((String p) {
+                    return DropdownMenuItem<String>(
+                      value: p,
+                      child: Text(p),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedPayment = value!;
+                    });
+                  },
+                ),
               ],
             ),
           ),
