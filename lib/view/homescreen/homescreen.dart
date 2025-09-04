@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_tracker/res/components/add_balance.dart';
 import 'package:expense_tracker/res/components/add_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (uid == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -56,14 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
-            Expanded(
-              child: BalanceItem(
-                title: 'Balance',
-                amount: 2000,
-                color: AppColors.blueColor,
-                icon: Icons.add,
-              ),
-            ),
+            AddBalance(title: 'Balance', balance: 2000),
             Row(
               children: [
                 Expanded(
@@ -111,7 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       var exp = expenses[index].data() as Map<String, dynamic>;
 
                       return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
                         child: ListTile(
                           title: Text(
                             exp['title'] ?? 'No Title',
@@ -119,8 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           subtitle: Text(
                             "Category: ${exp['category']}\n"
-                                "Payment: ${exp['payment']}\n"
-                                "Date: ${exp['date']}",
+                            "Payment: ${exp['payment']}\n"
+                            "Date: ${exp['date']}",
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -137,7 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     expenses[index].id,
                                   );
                                 },
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
                               ),
 
                               // ✏️ Edit button
@@ -145,10 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   _showEditDialog(
                                     expenses[index].id, // pass docId
-                                    exp,                // pass data
+                                    exp, // pass data
                                   );
                                 },
-                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
                               ),
                             ],
                           ),
@@ -168,7 +169,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ✏️ Edit dialog
   void _showEditDialog(String docId, Map<String, dynamic> data) {
     final titleController = TextEditingController(text: data['title']);
-    final amountController = TextEditingController(text: data['amount'].toString());
+    final amountController = TextEditingController(
+      text: data['amount'].toString(),
+    );
 
     final List<String> categories = [
       'Food',
@@ -216,8 +219,14 @@ class _HomeScreenState extends State<HomeScreen> {
           content: SingleChildScrollView(
             child: Column(
               children: [
-                TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
-                TextField(controller: amountController, decoration: const InputDecoration(labelText: "Amount")),
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: "Title"),
+                ),
+                TextField(
+                  controller: amountController,
+                  decoration: const InputDecoration(labelText: "Amount"),
+                ),
                 DropdownButtonFormField<String>(
                   value: selectedCategory,
                   decoration: const InputDecoration(labelText: "Category"),
@@ -237,10 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   value: selectedPayment,
                   decoration: const InputDecoration(labelText: "Payment"),
                   items: payment.map((String p) {
-                    return DropdownMenuItem<String>(
-                      value: p,
-                      child: Text(p),
-                    );
+                    return DropdownMenuItem<String>(value: p, child: Text(p));
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
