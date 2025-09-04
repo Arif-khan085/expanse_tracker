@@ -19,16 +19,17 @@ class AddBalance extends StatelessWidget {
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: BoxBorder.all(color: AppColors.greenColor),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 6,
-
-          ),
-        ],
+        gradient: RadialGradient(
+          colors: [Colors.green, Colors.red,],
+          center: Alignment.center,
+          radius: 0.8,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.greenColor.withOpacity(0.5),
+          width: 1,
+        ),
+        color: AppColors.greenColor.withOpacity(0.05),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,14 +39,14 @@ class AddBalance extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 18,
-              color: Colors.grey[700]
+              color: Colors.grey[700],
             ),
           ),
 
           // Balance
           Text(
             "\$${balance.toStringAsFixed(2)}",
-            style:  TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Colors.green,

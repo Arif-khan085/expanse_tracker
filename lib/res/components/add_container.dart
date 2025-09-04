@@ -21,93 +21,87 @@ class BalanceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0, // shadow effect
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.16,
-        //width:  screenWidth * 0.9,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [Colors.orange, Colors.red,],
-            center: Alignment.center,
-            radius: 0.8,
-          ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
-          color: color.withValues(alpha: 0.05), // light background
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.16,
+      //width:  screenWidth * 0.9,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          colors: [Colors.orange, Colors.red,],
+          center: Alignment.center,
+          radius: 0.8,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-         crossAxisAlignment: CrossAxisAlignment.center,
-         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // ─── Top part ───
-            Row(
-              children: [
-                // Icon
-                const SizedBox(width: 16),
-                // Text content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      Text(
-                        '\$${amount.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            // ─── Bottom part ───
-            if (footerText != null || (footerIcons != null && footerIcons!.isNotEmpty))
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
+        color: color.withValues(alpha: 0.05), // light background
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+       crossAxisAlignment: CrossAxisAlignment.center,
+       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // ─── Top part ───
+          Row(
+            children: [
+              // Icon
+              const SizedBox(width: 16),
+              // Text content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Bottom text
-                    if (footerText != null)
-                      Text(
-                        footerText!,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.grey[700],
                       ),
-
-                    // Bottom icons
-                    if (footerIcons != null && footerIcons!.isNotEmpty)
-                      Row(
-                        children: footerIcons!
-                            .map((iconData) => Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Icon(iconData, size: 30, color: color),
-                        ))
-                            .toList(),
+                    ),
+                    Text(
+                      '\$${amount.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: color,
                       ),
+                    ),
                   ],
                 ),
               ),
-          ],
-        ),
+            ],
+          ),
+
+          // ─── Bottom part ───
+          if (footerText != null || (footerIcons != null && footerIcons!.isNotEmpty))
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Bottom text
+                  if (footerText != null)
+                    Text(
+                      footerText!,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+
+                  // Bottom icons
+                  if (footerIcons != null && footerIcons!.isNotEmpty)
+                    Row(
+                      children: footerIcons!
+                          .map((iconData) => Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Icon(iconData, size: 30, color: color),
+                      ))
+                          .toList(),
+                    ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
