@@ -19,9 +19,9 @@ class AddBalance extends StatelessWidget {
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
-        border: BoxBorder.all(color: AppColors.greenColor),
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+        border: BoxBorder.all(color: AppColors.greenColor),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade300,
@@ -36,16 +36,16 @@ class AddBalance extends StatelessWidget {
           // Cart Title
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.bold,
+              color: Colors.grey[700]
             ),
           ),
 
           // Balance
           Text(
             "\$${balance.toStringAsFixed(2)}",
-            style: const TextStyle(
+            style:  TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Colors.green,
