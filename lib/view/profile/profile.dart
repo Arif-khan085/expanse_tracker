@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
 import '../../res/components/profile_seting.dart';
+import '../settings/settings_screens.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -37,15 +38,6 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image(
-                  image: AssetImage('assets/images/my.jpeg'),
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
               SizedBox(height: screenHeight * 0.02),
               Stack(
                 clipBehavior: Clip.none,
@@ -90,7 +82,9 @@ class _ProfileState extends State<Profile> {
                 leadingIcon: const Icon(Icons.key),
                 title: 'Setting',
                 trailingIcon: const Icon(Icons.arrow_forward_ios_sharp),
-                onTap: () {},
+                onTap: () {
+                  Get.to(SettingsView());
+                },
               ),
               const Divider(),
               ProfileTile(
