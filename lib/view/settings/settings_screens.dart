@@ -1,13 +1,18 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../res/routes/routes_named.dart';
+import '../../view_models/services/alldata/clearalldata.dart';
 import '../../view_models/settings/setting_view_models.dart';
 
 class SettingsView extends StatelessWidget {
   final SettingsViewModel controller = Get.put(SettingsViewModel());
+  String? selectedLanguage;
+  final expenseService = ExpenseService();
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: AppColors.cardColor,
@@ -15,7 +20,7 @@ class SettingsView extends StatelessWidget {
       body: ListView(
         children: [
           // ---------- App Preferences ----------
-          ListTile(title: Text("App Preferences", style: TextStyle(fontWeight: FontWeight.bold))),
+          ListTile(title: Text("App Preferences".tr, style: TextStyle(fontWeight: FontWeight.bold))),
 
           Obx(() => ListTile(
             title: Text("Theme Mode"),
@@ -35,6 +40,19 @@ class SettingsView extends StatelessWidget {
             ),
           )),
 
+         /* Obx(() => ListTile(
+            title: Text("Language"),
+            subtitle: Text(controller.selectedLanguage.value),
+            trailing: DropdownButton<String>(
+              value: controller.selectedLanguage.value,
+              items: ["English", "Urdu"].map((lang) {
+                return DropdownMenuItem(value: lang, child: Text(lang));
+              }).toList(),
+              onChanged: (val) => controller.changeLanguage(val!),
+            ),
+          )),
+
+          */
           Obx(() => ListTile(
             title: Text("Language"),
             subtitle: Text(controller.selectedLanguage.value),
@@ -47,10 +65,11 @@ class SettingsView extends StatelessWidget {
             ),
           )),
 
+
           Divider(),
 
           // ---------- Notifications ----------
-          ListTile(title: Text("Notifications", style: TextStyle(fontWeight: FontWeight.bold))),
+          ListTile(title: Text("Notifications".tr, style: TextStyle(fontWeight: FontWeight.bold))),
 
           Obx(() => SwitchListTile(
             title: Text("Enable Reminders"),
@@ -59,7 +78,7 @@ class SettingsView extends StatelessWidget {
           )),
 
           Obx(() => SwitchListTile(
-            title: Text("Daily Expense Summary"),
+            title: Text("Daily Expense Summary".tr),
             value: controller.dailySummaryEnabled.value,
             onChanged: controller.toggleDailySummary,
           )),
@@ -73,7 +92,7 @@ class SettingsView extends StatelessWidget {
           Divider(),
 
           // ---------- Data Management ----------
-          ListTile(title: Text("Data Management", style: TextStyle(fontWeight: FontWeight.bold))),
+          ListTile(title: Text("Data Management".tr, style: TextStyle(fontWeight: FontWeight.bold))),
           ListTile(
             title: Text("Clear All Data",
                 style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
@@ -86,7 +105,7 @@ class SettingsView extends StatelessWidget {
                 textConfirm: "Yes",
                 confirmTextColor: Colors.white,
                 onConfirm: () {
-                  controller.clearAllData();
+                  expenseService.clearAllData();
                   Get.back(); // close dialog
                 },
                 onCancel: () {},

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/res/components/add_balance.dart';
 import 'package:expense_tracker/res/components/add_container.dart';
+import 'package:expense_tracker/view/settings/settings_screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,6 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
         onItemSelect: (int value) {},
       ),
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: (){
+            Get.to(SettingsView());
+          }, icon: Icon(Icons.settings,color: AppColors.whiteColor)),
+        ],
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.cardColor,
         centerTitle: true,

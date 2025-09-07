@@ -19,6 +19,8 @@ class AppTranslations extends Translations {
       'rate_us': 'Rate Us',
       'contact_support': 'Contact Support',
       'logout': 'Logout',
+      "Daily Expense Summary" : "Daily Expense Summary",
+      'Data Management' : 'Data Management"'
     },
     'ur_PK': {
       'home_title': 'ہوم',
@@ -36,6 +38,8 @@ class AppTranslations extends Translations {
       'rate_us': 'ہمیں ریٹ کریں',
       'contact_support': 'مدد سے رابطہ کریں',
       'logout': 'لاگ آؤٹ',
+      "Daily Expense Summary" : "روزانہ خرچ کا خلاصہ",
+      'Data Management' : 'ڈیٹا مینجمنٹ"',
     }
   };
 }

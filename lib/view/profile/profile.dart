@@ -2,7 +2,6 @@ import 'package:expense_tracker/view/login/login_view.dart';
 import 'package:expense_tracker/view_models/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
 import '../../res/components/profile_seting.dart';

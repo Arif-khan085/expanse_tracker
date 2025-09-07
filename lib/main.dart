@@ -1,4 +1,5 @@
 import 'package:expense_tracker/res/routes/routes.dart';
+import 'package:expense_tracker/res/translation/apptranslation.dart';
 import 'package:expense_tracker/view/splash_screen.dart';
 import 'package:expense_tracker/view_models/services/firebase_services.dart';
 
@@ -27,9 +28,15 @@ class MyApp extends StatelessWidget {
 
     return Obx(() => GetMaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: SplashScreen(),
       getPages: AppRoutes.appRoutes(),
 
+      // 🌐 Languages
+      translations: AppTranslations(),
+      locale: settingsController.currentLocale.value, // <-- bind locale
+      fallbackLocale: const Locale('en', 'US'),
+      
       // Themes
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
