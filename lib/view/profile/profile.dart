@@ -26,6 +26,7 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
         title: const Text('Profile'),
+
       ),
       bottomNavigationBar: CustomNavigationBar(
         selectIndex: 3,
