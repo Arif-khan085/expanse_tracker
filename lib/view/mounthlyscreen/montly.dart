@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../res/components/search_filter.dart';
-
 
 class MonthlyRecord extends StatefulWidget {
   const MonthlyRecord({super.key});
@@ -29,18 +29,11 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
 
     String uid = user!.uid;
 
-    // 📌 Get start and end of current month
-    DateTime today = DateTime.now();
-    DateTime startOfMonth = DateTime(today.year, today.month, 1);
-    DateTime endOfMonth =
-    DateTime(today.year, today.month + 1, 0, 23, 59, 59); // last day of month
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
         title: const Text("Monthly Expenses"),
       ),
-
       body: Column(
         children: [
           /// 🔍 Search bar
@@ -54,26 +47,27 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
             },
           ),
 
-          /// 📌 Expense list
+          /// 📌 Expense list grouped by months
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('users')
                   .doc(uid)
                   .collection('expenses')
-                  .where('createdAt',
-                  isGreaterThanOrEqualTo: startOfMonth,
-                  isLessThanOrEqualTo: endOfMonth)
                   .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No expenses this month"));
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No expenses found"));
                 }
 
                 final expenses = snapshot.data!.docs;
 
-                // 🔍 Filter by search query
+                /// 🔍 Apply search filter
                 final filteredExpenses = expenses.where((doc) {
                   var exp = doc.data() as Map<String, dynamic>;
                   String title = (exp['title'] ?? '').toString().toLowerCase();
@@ -91,20 +85,69 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
                   return const Center(child: Text("No matching expenses"));
                 }
 
-                return ListView.builder(
-                  itemCount: filteredExpenses.length,
-                  itemBuilder: (context, index) {
-                    var exp =
-                    filteredExpenses[index].data() as Map<String, dynamic>;
+                /// ✅ Group by Month
+                Map<String, List<QueryDocumentSnapshot>> grouped = {};
+                for (var doc in filteredExpenses) {
+                  var exp = doc.data() as Map<String, dynamic>;
+                  DateTime createdAt =
+                  (exp['createdAt'] as Timestamp).toDate();
 
-                    return Card(
-                      child: ListTile(
-                        title: Text(exp['title'] ?? 'No Title'),
-                        subtitle: Text("Category: ${exp['category']}\n"
-                            "Payment: ${exp['payment']}\n"
-                            "Date: ${exp['date']}"),
-                        trailing: Text("Rs ${exp['amount']}"),
-                      ),
+                  String monthKey =
+                  DateFormat("MMMM yyyy").format(createdAt);
+
+                  if (!grouped.containsKey(monthKey)) {
+                    grouped[monthKey] = [];
+                  }
+                  grouped[monthKey]!.add(doc);
+                }
+
+                // ✅ Sorted months (latest first)
+                final sortedKeys = grouped.keys.toList()
+                  ..sort((a, b) => DateFormat("MMMM yyyy")
+                      .parse(b)
+                      .compareTo(DateFormat("MMMM yyyy").parse(a)));
+
+                return ListView.builder(
+                  itemCount: sortedKeys.length,
+                  itemBuilder: (context, index) {
+                    String month = sortedKeys[index];
+                    List<QueryDocumentSnapshot> monthExpenses =
+                    grouped[month]!;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 📅 Month Header
+                        Container(
+                          width: double.infinity,
+                          color: Colors.green.shade100,
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            month, // e.g. "September 2025"
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        // 📌 Expenses under this month
+                        ...monthExpenses.map((doc) {
+                          var exp = doc.data() as Map<String, dynamic>;
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
+                            child: ListTile(
+                              title: Text(exp['title'] ?? 'No Title'),
+                              subtitle: Text(
+                                "Category: ${exp['category'] ?? 'N/A'}\n"
+                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                              ),
+                              trailing: Text("Rs ${exp['amount'] ?? 0}"),
+                            ),
+                          );
+                        }).toList(),
+                      ],
                     );
                   },
                 );

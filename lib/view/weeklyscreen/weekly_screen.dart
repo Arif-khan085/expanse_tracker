@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../res/components/search_filter.dart';
 
@@ -28,22 +29,11 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
 
     String uid = user!.uid;
 
-    // 📌 Get start and end of current week
-    DateTime today = DateTime.now();
-    DateTime startOfWeek =
-    today.subtract(Duration(days: today.weekday - 1)); // Monday
-    startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-
-    DateTime endOfWeek = startOfWeek.add(
-      const Duration(days: 6, hours: 23, minutes: 59, seconds: 59),
-    );
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
         title: const Text("Weekly Expenses"),
       ),
-
       body: Column(
         children: [
           /// 🔍 Search bar
@@ -57,26 +47,27 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
             },
           ),
 
-          /// 📌 Expense list
+          /// 📌 Expense list grouped by weeks
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('users')
                   .doc(uid)
                   .collection('expenses')
-                  .where('createdAt',
-                  isGreaterThanOrEqualTo: startOfWeek,
-                  isLessThanOrEqualTo: endOfWeek)
                   .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No expenses this week"));
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No expenses found"));
                 }
 
                 final expenses = snapshot.data!.docs;
 
-                // 🔍 Filter by search query
+                /// 🔍 Apply search filter
                 final filteredExpenses = expenses.where((doc) {
                   var exp = doc.data() as Map<String, dynamic>;
                   String title = (exp['title'] ?? '').toString().toLowerCase();
@@ -94,20 +85,74 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
                   return const Center(child: Text("No matching expenses"));
                 }
 
-                return ListView.builder(
-                  itemCount: filteredExpenses.length,
-                  itemBuilder: (context, index) {
-                    var exp =
-                    filteredExpenses[index].data() as Map<String, dynamic>;
+                /// ✅ Group by Week
+                Map<String, List<QueryDocumentSnapshot>> grouped = {};
+                for (var doc in filteredExpenses) {
+                  var exp = doc.data() as Map<String, dynamic>;
+                  DateTime createdAt =
+                  (exp['createdAt'] as Timestamp).toDate();
 
-                    return Card(
-                      child: ListTile(
-                        title: Text(exp['title'] ?? 'No Title'),
-                        subtitle: Text("Category: ${exp['category']}\n"
-                            "Payment: ${exp['payment']}\n"
-                            "Date: ${exp['date']}"),
-                        trailing: Text("Rs ${exp['amount']}"),
-                      ),
+                  // Week start (Monday) and end (Sunday)
+                  DateTime weekStart = createdAt
+                      .subtract(Duration(days: createdAt.weekday - 1));
+                  weekStart = DateTime(
+                      weekStart.year, weekStart.month, weekStart.day);
+
+                  DateTime weekEnd = weekStart.add(const Duration(days: 6));
+
+                  String weekKey =
+                      "${DateFormat('dd MMM').format(weekStart)} - ${DateFormat('dd MMM yyyy').format(weekEnd)}";
+
+                  if (!grouped.containsKey(weekKey)) {
+                    grouped[weekKey] = [];
+                  }
+                  grouped[weekKey]!.add(doc);
+                }
+
+                // ✅ Sorted weeks (latest first)
+                final sortedKeys = grouped.keys.toList()
+                  ..sort((a, b) => b.compareTo(a));
+
+                return ListView.builder(
+                  itemCount: sortedKeys.length,
+                  itemBuilder: (context, index) {
+                    String week = sortedKeys[index];
+                    List<QueryDocumentSnapshot> weekExpenses = grouped[week]!;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 📅 Week Header
+                        Container(
+                          width: double.infinity,
+                          color: Colors.blue.shade100,
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            "Week: $week",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        // 📌 Expenses under this week
+                        ...weekExpenses.map((doc) {
+                          var exp = doc.data() as Map<String, dynamic>;
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
+                            child: ListTile(
+                              title: Text(exp['title'] ?? 'No Title'),
+                              subtitle: Text(
+                                "Category: ${exp['category'] ?? 'N/A'}\n"
+                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                              ),
+                              trailing: Text("Rs ${exp['amount'] ?? 0}"),
+                            ),
+                          );
+                        }).toList(),
+                      ],
                     );
                   },
                 );

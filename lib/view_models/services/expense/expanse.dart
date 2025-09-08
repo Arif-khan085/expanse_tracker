@@ -36,4 +36,6 @@ class Expanse extends GetxController {
       Get.snackbar("Error", e.toString());
     }
   }
+
+  void setSalary(double salary) {}
 }

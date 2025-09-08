@@ -25,7 +25,10 @@ class _ExpenseState extends State<Expense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.cardColor, title: Text('Add')),
+
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+          backgroundColor: AppColors.cardColor, title: Text('Add')),
       bottomNavigationBar: CustomNavigationBar(
         selectIndex: 1,
         onItemSelect: (int value) {},

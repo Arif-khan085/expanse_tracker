@@ -16,17 +16,18 @@ import '../../view/splash_screen.dart';
 class AppRoutes {
   static appRoutes() => [
     GetPage(
-      name: RoutesName.login,
-      page: () => SignIn(),
-      transitionDuration: Duration(milliseconds: 250),
-      transition: Transition.leftToRightWithFade,
-    ),
-    GetPage(
       name: RoutesName.splashScreen,
       page: () => SplashScreen(),
       transitionDuration: Duration(milliseconds: 250),
       transition: Transition.leftToRightWithFade,
     ),
+    GetPage(
+      name: RoutesName.login,
+      page: () => SignIn(),
+      transitionDuration: Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
+    ),
+
     GetPage(
       name: RoutesName.loginView,
       page: () => LoginView(),

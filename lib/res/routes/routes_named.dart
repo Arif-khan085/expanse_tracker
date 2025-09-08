@@ -1,5 +1,5 @@
 class RoutesName {
-  static const String splashScreen = '/';
+  static const String splashScreen = '/splash';
   static const String loginView = '/login';
 
   static const String login = '/login_screen';
