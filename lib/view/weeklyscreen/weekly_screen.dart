@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 
 import '../../res/components/search_filter.dart';
 
-
-class MonthlyRecord extends StatefulWidget {
-  const MonthlyRecord({super.key});
+class WeeklyRecord extends StatefulWidget {
+  const WeeklyRecord({super.key});
 
   @override
-  State<MonthlyRecord> createState() => _MonthlyRecordState();
+  State<WeeklyRecord> createState() => _WeeklyRecordState();
 }
 
-class _MonthlyRecordState extends State<MonthlyRecord> {
+class _WeeklyRecordState extends State<WeeklyRecord> {
   final User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController searchController = TextEditingController();
 
@@ -29,16 +28,20 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
 
     String uid = user!.uid;
 
-    // 📌 Get start and end of current month
+    // 📌 Get start and end of current week
     DateTime today = DateTime.now();
-    DateTime startOfMonth = DateTime(today.year, today.month, 1);
-    DateTime endOfMonth =
-    DateTime(today.year, today.month + 1, 0, 23, 59, 59); // last day of month
+    DateTime startOfWeek =
+    today.subtract(Duration(days: today.weekday - 1)); // Monday
+    startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+
+    DateTime endOfWeek = startOfWeek.add(
+      const Duration(days: 6, hours: 23, minutes: 59, seconds: 59),
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
-        title: const Text("Monthly Expenses"),
+        title: const Text("Weekly Expenses"),
       ),
 
       body: Column(
@@ -62,13 +65,13 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
                   .doc(uid)
                   .collection('expenses')
                   .where('createdAt',
-                  isGreaterThanOrEqualTo: startOfMonth,
-                  isLessThanOrEqualTo: endOfMonth)
+                  isGreaterThanOrEqualTo: startOfWeek,
+                  isLessThanOrEqualTo: endOfWeek)
                   .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No expenses this month"));
+                  return const Center(child: Text("No expenses this week"));
                 }
 
                 final expenses = snapshot.data!.docs;

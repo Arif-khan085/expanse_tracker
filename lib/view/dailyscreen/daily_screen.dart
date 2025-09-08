@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import '../../res/components/search_filter.dart';
 
 
-class MonthlyRecord extends StatefulWidget {
-  const MonthlyRecord({super.key});
+class DailyRecord extends StatefulWidget {
+  const DailyRecord({super.key});
 
   @override
-  State<MonthlyRecord> createState() => _MonthlyRecordState();
+  State<DailyRecord> createState() => _DailyRecordState();
 }
 
-class _MonthlyRecordState extends State<MonthlyRecord> {
+class _DailyRecordState extends State<DailyRecord> {
   final User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController searchController = TextEditingController();
 
@@ -29,16 +29,16 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
 
     String uid = user!.uid;
 
-    // 📌 Get start and end of current month
+    // 📌 Get today's date only
     DateTime today = DateTime.now();
-    DateTime startOfMonth = DateTime(today.year, today.month, 1);
-    DateTime endOfMonth =
-    DateTime(today.year, today.month + 1, 0, 23, 59, 59); // last day of month
+    DateTime startOfDay = DateTime(today.year, today.month, today.day, 0, 0, 0);
+    DateTime endOfDay =
+    DateTime(today.year, today.month, today.day, 23, 59, 59);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
-        title: const Text("Monthly Expenses"),
+        title: const Text("Daily Expenses"),
       ),
 
       body: Column(
@@ -62,15 +62,16 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
                   .doc(uid)
                   .collection('expenses')
                   .where('createdAt',
-                  isGreaterThanOrEqualTo: startOfMonth,
-                  isLessThanOrEqualTo: endOfMonth)
+                  isGreaterThanOrEqualTo: startOfDay,
+                  isLessThanOrEqualTo: endOfDay)
                   .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No expenses this month"));
+                  return const Center(child: Text("No expenses for today"));
                 }
 
+                // All expenses
                 final expenses = snapshot.data!.docs;
 
                 // 🔍 Filter by search query

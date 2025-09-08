@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/res/components/buttomnavigatorbar.dart';
+import 'package:expense_tracker/res/components/daily_record.dart';
+import 'package:expense_tracker/view/dailyscreen/daily_screen.dart';
+import 'package:expense_tracker/view/mounthlyscreen/montly.dart';
+import 'package:expense_tracker/view/weeklyscreen/weekly_screen.dart';
+import 'package:expense_tracker/view/yearlyscreen/yearly.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../res/colors/app_colors.dart';
-import '../../res/components/daily_record.dart';
+
 import '../../res/components/piechart.dart';
 
 class Report extends StatefulWidget {
+
   const Report({super.key});
 
   @override
@@ -78,11 +86,18 @@ class _ReportState extends State<Report> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomElevatedButton(text: 'Daily', onPressed: (){}),
-              CustomElevatedButton(text: 'Weakly', onPressed: (){}),
-              CustomElevatedButton(text: 'Mounthly', onPressed: (){}),
-              CustomElevatedButton(text: 'Yearly', onPressed: (){}),
-
+              CustomElevatedButton(text: 'Daily', onPressed: (){
+                Get.to(DailyRecord());
+              }),
+              CustomElevatedButton(text: 'Weekly', onPressed: (){
+                Get.to(WeeklyRecord());
+              }),
+              CustomElevatedButton(text: 'Monthly', onPressed: (){
+                Get.to(MonthlyRecord());
+              }),
+              CustomElevatedButton(text: 'Yearly', onPressed: (){
+                Get.to(YearlyRecord());
+              }),
             ],
           ),
           SizedBox(

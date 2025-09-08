@@ -10,4 +10,7 @@ class RoutesName {
   static const String report = '/home_screen';
   static const String monthly = '/monthly_screen';
   static const String yearly = '/yearly_screen';
+  static const String daily = '/daily_screen';
+  static const String weekly = '/weekly_screen';
+  static const String allScreen = '/All_screen';
 }
