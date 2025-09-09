@@ -4,17 +4,18 @@ class BalanceItem extends StatelessWidget {
   final String title;
   final double amount;
   final Color color;
-  final IconData icon;
+  final IconData icon; // required icon
+  final VoidCallback onIconPressed; // required button action
   final String? footerText; // bottom text
   final List<IconData>? footerIcons; // bottom icons
-
 
   const BalanceItem({
     super.key,
     required this.title,
     required this.amount,
     required this.color,
-    required this.icon,
+    required this.icon, // required
+    required this.onIconPressed, // required
     this.footerText,
     this.footerIcons,
   });
@@ -23,28 +24,31 @@ class BalanceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.16,
-      //width:  screenWidth * 0.9,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: RadialGradient(
-          colors: [Colors.orange, Colors.red,],
+        gradient: const RadialGradient(
+          colors: [Colors.orange, Colors.red],
           center: Alignment.center,
           radius: 0.8,
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
-        color: color.withValues(alpha: 0.05), // light background
+        color: color.withValues(alpha: 0.05),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-       crossAxisAlignment: CrossAxisAlignment.center,
-       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // ─── Top part ───
           Row(
             children: [
-              // Icon
+              // Required IconButton
+              IconButton(
+                icon: Icon(icon, size: 28, color: color),
+                onPressed: onIconPressed,
+              ),
               const SizedBox(width: 16),
+
               // Text content
               Expanded(
                 child: Column(
@@ -106,11 +110,3 @@ class BalanceItem extends StatelessWidget {
     );
   }
 }
-/*Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: color),
-                ),*/

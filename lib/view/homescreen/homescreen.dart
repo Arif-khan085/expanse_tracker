@@ -50,9 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: (){
+          IconButton(onPressed: () {
             Get.to(SettingsView());
-          }, icon: Icon(Icons.settings,color: AppColors.whiteColor)),
+          }, icon: Icon(Icons.settings, color: AppColors.whiteColor)),
         ],
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.cardColor,
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
-            AddBalance(title: 'Balance', balance: 2000),
+            AddBalance(title: 'Balance', balance: 2000,),
             Row(
               children: [
                 Expanded(
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: 'Salary',
                     amount: 2000,
                     color: AppColors.tealColor,
-                    icon: Icons.save,
+                    icon: Icons.add, onIconPressed: () {  },
                   ),
                 ),
                 const SizedBox(width: 5),
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: 'Expense',
                     amount: 2000,
                     color: AppColors.blueColor,
-                    icon: Icons.exit_to_app,
+                    icon: Icons.add, onIconPressed: () {  },
                   ),
                 ),
               ],
@@ -129,7 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ListView.builder(
                           itemCount: limitedExpenses.length,
                           itemBuilder: (context, index) {
-                            var exp = limitedExpenses[index].data() as Map<String, dynamic>;
+                            var exp = limitedExpenses[index].data() as Map<
+                                String,
+                                dynamic>;
 
                             return Card(
                               margin: const EdgeInsets.symmetric(
@@ -163,121 +165,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  // ✏️ Edit dialog
-  void _showEditDialog(String docId, Map<String, dynamic> data) {
-    final titleController = TextEditingController(text: data['title']);
-    final amountController = TextEditingController(
-      text: data['amount'].toString(),
-    );
-
-    final List<String> categories = [
-      'Food',
-      'Transport',
-      'Shopping',
-      'Bills',
-      'Entertainment',
-      'Health',
-      'Education',
-      'Savings',
-      'Travel',
-      'Groceries',
-      'Rent',
-      'Salary',
-      'Utilities',
-      'Investments',
-      'Others',
-    ];
-    String selectedCategory = data['category'] ?? categories.first;
-
-    final List<String> payment = [
-      'Cash',
-      'Credit Card',
-      'Debit Card',
-      'Bank Transfer',
-      'MobileWallet',
-      'PayPal',
-      'GooglePay',
-      'ApplePay',
-      'EasyPaisa',
-      'JazzCash',
-      'Cheque',
-      'UPI',
-      'Cryptocurrency',
-      'Gift Card',
-      'Others',
-    ];
-    String selectedPayment = data['payment'] ?? payment.first;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Edit Expense"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: "Title"),
-                ),
-                TextField(
-                  controller: amountController,
-                  decoration: const InputDecoration(labelText: "Amount"),
-                ),
-                DropdownButtonFormField<String>(
-                  value: selectedCategory,
-                  decoration: const InputDecoration(labelText: "Category"),
-                  items: categories.map((String category) {
-                    return DropdownMenuItem<String>(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCategory = value!;
-                    });
-                  },
-                ),
-                DropdownButtonFormField<String>(
-                  value: selectedPayment,
-                  decoration: const InputDecoration(labelText: "Payment"),
-                  items: payment.map((String p) {
-                    return DropdownMenuItem<String>(value: p, child: Text(p));
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedPayment = value!;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final updatedData = {
-                  "title": titleController.text,
-                  "amount": double.tryParse(amountController.text) ?? 0,
-                  "category": selectedCategory,
-                  "payment": selectedPayment,
-                  "updatedAt": DateTime.now(),
-                };
-                expenseController.updateExpense(docId, updatedData);
-                Navigator.pop(context);
-              },
-              child: const Text("Update"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
-

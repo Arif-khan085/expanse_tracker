@@ -31,28 +31,35 @@ class AddBalance extends StatelessWidget {
         ),
         color: AppColors.greenColor.withOpacity(0.05),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Cart Title
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey[700],
+      child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.add),
+              ],
             ),
-          ),
+            // Cart Title
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[700],
+              ),
+            ),
 
-          // Balance
-          Text(
-            "\$${balance.toStringAsFixed(2)}",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.green,
+            // Balance
+            Text(
+              "\$${balance.toStringAsFixed(2)}",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.green,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
