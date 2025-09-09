@@ -9,6 +9,8 @@ class AddBalance extends StatelessWidget {
     super.key,
     required this.title,
     required this.balance,
+    required IconData icon,
+    required  onIconPressed,
   });
 
   @override
@@ -19,8 +21,8 @@ class AddBalance extends StatelessWidget {
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
-        gradient: RadialGradient(
-          colors: [Colors.green, Colors.red,],
+        gradient: const RadialGradient(
+          colors: [Colors.green, Colors.red],
           center: Alignment.center,
           radius: 0.8,
         ),
@@ -31,35 +33,40 @@ class AddBalance extends StatelessWidget {
         ),
         color: AppColors.greenColor.withOpacity(0.05),
       ),
-      child: Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.add),
-              ],
-            ),
-            // Cart Title
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[700],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.add_circle, color: Colors.green, size: 28),
+                onPressed: () {
+                  // yahan apna function call karna
+                },
               ),
-            ),
+            ],
+          ),
 
-            // Balance
-            Text(
-              "\$${balance.toStringAsFixed(2)}",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.green,
-              ),
+          // Cart Title
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[700],
             ),
-          ],
-        ),
+          ),
+
+          // Balance
+          Text(
+            "\$${balance.toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.green,
+            ),
+          ),
+        ],
       ),
     );
   }
