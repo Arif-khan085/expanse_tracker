@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import '../../view/dailyscreen/daily_screen.dart';
 import '../../view/login/login_view.dart';
 import '../../view/mounthlyscreen/montly.dart';
-import '../../view/seeallexpense/All_expense.dart';
+
 import '../../view/signin/signin.dart';
 import '../../view/splash_screen.dart';
 

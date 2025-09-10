@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 class AddBalance extends StatelessWidget {
   final String title;
   final double balance;
+  final VoidCallback onIconPressed;
 
   const AddBalance({
     super.key,
     required this.title,
     required this.balance,
     required IconData icon,
-    required  onIconPressed,
+    required this.onIconPressed,
   });
 
   @override
@@ -40,10 +41,8 @@ class AddBalance extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                icon: const Icon(Icons.add_circle, color: Colors.green, size: 28),
-                onPressed: () {
-                  // yahan apna function call karna
-                },
+                icon:  Icon(Icons.add_circle, color: Colors.green, size: 28),
+                onPressed: onIconPressed,
               ),
             ],
           ),
