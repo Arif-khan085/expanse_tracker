@@ -5,13 +5,15 @@ import 'package:expense_tracker/view/settings/settings_screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
-import '../../view_models/services/expense/expanse.dart';
+
+import '../../view_models/services/amount_controller.dart';
 import '../seeallexpense/All_expense.dart';
 
+
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({super.key});
 
   @override
@@ -19,12 +21,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   User? user;
   String? uid;
-  final Expanse expenseController = Get.put(Expanse());
 
-  // ✅ Local balance (sirf UI ke liye)
-  double totalBalance = 0;
+  //final AmountService _expenseService = AmountService();
 
   @override
   void initState() {
@@ -39,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+   //final AmountService = Get.put(AmountService());
+  final AmountService controller = Get.put(AmountService());
   @override
   Widget build(BuildContext context) {
     if (uid == null) {
@@ -68,30 +71,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // ✅ Balance Card (sirf Balance + Expenses ka relation)
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(uid)
-                .collection('expenses')
-                .snapshots(),
+          // ✅ Available Balance
+          StreamBuilder<DocumentSnapshot>(
+            stream: controller.getAvailableBalance(uid!),
             builder: (context, snapshot) {
-              double totalExpense = 0;
-              if (snapshot.hasData) {
-                totalExpense = snapshot.data!.docs.fold(
-                  0,
-                      (sum, doc) => sum + (doc['amount'] as num).toDouble(),
-                );
+              double availableBalance = 0;
+              if (snapshot.hasData && snapshot.data!.exists) {
+                availableBalance =
+                    (snapshot.data!['amount'] as num).toDouble();
               }
-
-              double availableBalance = totalBalance - totalExpense;
-
               return AddBalance(
                 title: 'Available Balance',
                 balance: availableBalance,
-                icon: Icons.add,
-                onIconPressed: () {
-                  _showAddAmountDialog("Balance");
+                icon: Icons.edit,
+                onIconPressed: () async {
+                  final balSnap = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .collection('balance')
+                      .doc('balanceDoc')
+                      .get();
+
+                  double currentBalance =
+                  balSnap.exists ? (balSnap['amount'] as num).toDouble() : 0;
+
+                  _showEditBalanceDialog(currentBalance);
                 },
               );
             },
@@ -102,12 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection('salary')
-                      .doc('salaryDoc')
-                      .snapshots(),
+                  stream: controller.getSalary(uid!),
                   builder: (context, snapshot) {
                     double salary = 0;
                     if (snapshot.hasData && snapshot.data!.exists) {
@@ -119,9 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Salary',
                       amount: salary,
                       color: AppColors.tealColor,
-                      icon: Icons.add,
+                      icon: Icons.edit,
                       onIconPressed: () {
-                        _showAddSalaryDialog();
+                        _showEditSalaryDialog(salary);
                       },
                     );
                   },
@@ -129,20 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 5),
               Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection('expenses')
-                      .snapshots(),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: controller.getExpenseSummary(uid!),
                   builder: (context, snapshot) {
                     double totalExpense = 0;
-                    if (snapshot.hasData) {
-                      totalExpense = snapshot.data!.docs.fold(
-                        0,
-                            (sum, doc) =>
-                        sum + (doc['amount'] as num).toDouble(),
-                      );
+                    if (snapshot.hasData && snapshot.data!.exists) {
+                      totalExpense =
+                          (snapshot.data!['amount'] as num).toDouble();
                     }
 
                     return BalanceItem(
@@ -150,10 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Expense',
                       amount: totalExpense,
                       color: AppColors.blueColor,
-                      icon: Icons.add,
-                      onIconPressed: () {
-                        _showExpenseDialog();
-                      },
                     );
                   },
                 ),
@@ -165,12 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // 📌 Expense list
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(uid)
-                  .collection('expenses')
-                  .orderBy('createdAt', descending: true)
-                  .snapshots(),
+              stream: controller.getExpenses(uid!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(child: Text('No Expense Found'));
@@ -179,6 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 final expenses = snapshot.data!.docs;
                 final limitedExpenses =
                 expenses.length > 5 ? expenses.sublist(0, 5) : expenses;
+
+                // ✅ Auto update summary
+                controller.updateSummary(uid!, expenses);
 
                 return Column(
                   children: [
@@ -198,8 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ListView.builder(
                         itemCount: limitedExpenses.length,
                         itemBuilder: (context, index) {
-                          var exp = limitedExpenses[index].data()
-                          as Map<String, dynamic>;
+                          var exp =
+                          limitedExpenses[index].data() as Map<String, dynamic>;
 
                           return Card(
                             margin: const EdgeInsets.symmetric(
@@ -213,7 +199,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Payment: ${exp['payment']}\n"
                                     "Date: ${exp['date']}",
                               ),
-                              trailing: Text("Rs ${exp['amount']}"),
+                              trailing: Text(
+                                "Rs ${exp['amount']}",
+                                style: const TextStyle(
+
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              ),
                             ),
                           );
                         },
@@ -229,20 +222,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ✅ Dialog for Balance only (local update)
-  void _showAddAmountDialog(String type) {
-    final TextEditingController amountController = TextEditingController();
+  // ✅ Balance Edit Dialog
+  void _showEditBalanceDialog(double currentBalance) {
+    final TextEditingController balanceController =
+    TextEditingController(text: currentBalance.toString());
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Add $type"),
+          title: const Text("Edit Balance"),
           content: TextField(
-            controller: amountController,
+            controller: balanceController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-              labelText: "Enter Amount",
+              labelText: "Enter Balance",
               border: OutlineInputBorder(),
             ),
           ),
@@ -252,17 +246,38 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             ElevatedButton(
-              child: const Text("Save"),
-              onPressed: () {
-                final amount =
-                    double.tryParse(amountController.text.trim()) ?? 0;
+              child: const Text("Update"),
+              onPressed: () async {
+                final balance =
+                    double.tryParse(balanceController.text.trim()) ?? 0;
 
-                if (amount > 0) {
-                  setState(() {
-                    totalBalance += amount;
+                if (balance > 0) {
+                  await controller.updateBalance(uid!, balance);
+
+                  // ✅ Update availableBalance
+                  final expenseSnap = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .collection('summary')
+                      .doc('expenseDoc')
+                      .get();
+
+                  double totalExpense = expenseSnap.exists
+                      ? (expenseSnap['amount'] as num).toDouble()
+                      : 0;
+
+                  double availableBalance = balance - totalExpense;
+
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .collection('summary')
+                      .doc('availableBalanceDoc')
+                      .set({
+                    'amount': availableBalance,
+                    'updatedAt': FieldValue.serverTimestamp(),
                   });
                 }
-
                 Navigator.pop(context);
               },
             ),
@@ -272,15 +287,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ✅ Salary Dialog (Firebase me store hoga)
-  void _showAddSalaryDialog() {
-    final TextEditingController salaryController = TextEditingController();
+  // ✅ Salary Edit Dialog
+  void _showEditSalaryDialog(double currentSalary) {
+    final TextEditingController salaryController =
+    TextEditingController(text: currentSalary.toString());
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Add Salary"),
+          title: const Text("Edit Salary"),
           content: TextField(
             controller: salaryController,
             keyboardType: TextInputType.number,
@@ -295,90 +311,14 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             ElevatedButton(
-              child: const Text("Save"),
+              child: const Text("Update"),
               onPressed: () async {
                 final salary =
                     double.tryParse(salaryController.text.trim()) ?? 0;
 
                 if (salary > 0) {
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection('salary')
-                      .doc('salaryDoc')
-                      .set({
-                    'amount': salary,
-                    'updatedAt': FieldValue.serverTimestamp(),
-                  });
+                  await controller.updateSalary(uid!, salary);
                 }
-
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // ✅ Expense Add Dialog (Firestore me store hoga)
-  void _showExpenseDialog() {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController amountController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Add Expense"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  labelText: "Title",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: amountController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Amount",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () => Navigator.pop(context),
-            ),
-            ElevatedButton(
-              child: const Text("Save"),
-              onPressed: () async {
-                final title = titleController.text.trim();
-                final amount =
-                    double.tryParse(amountController.text.trim()) ?? 0;
-
-                if (title.isNotEmpty && amount > 0) {
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection('expenses')
-                      .add({
-                    'title': title,
-                    'amount': amount,
-                    'category': 'General',
-                    'payment': 'Cash',
-                    'date': DateTime.now().toString(),
-                    'createdAt': FieldValue.serverTimestamp(),
-                  });
-                }
-
                 Navigator.pop(context);
               },
             ),

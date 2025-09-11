@@ -1,14 +1,13 @@
 import 'package:expense_tracker/res/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../res/routes/routes_named.dart';
 import '../../view_models/services/alldata/clearalldata.dart';
 import '../../view_models/settings/setting_view_models.dart';
 
 class SettingsView extends StatelessWidget {
   final SettingsViewModel controller = Get.put(SettingsViewModel());
   String? selectedLanguage;
-  final expenseService = ExpenseService();
+  final expenseService = AmountService();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +120,6 @@ class SettingsView extends StatelessWidget {
           ListTile(title: Text("About App"), subtitle: Text("Version 1.0.0\nDeveloped by Arif")),
           ListTile(title: Text("Privacy Policy"), onTap: () {}),
           ListTile(title: Text("Terms & Conditions"), onTap: () {}),
-          ListTile(title: Text("Rate Us"), onTap: () {}),
           ListTile(title: Text("Contact Support"), subtitle: Text("support@email.com")),
         ],
       ),

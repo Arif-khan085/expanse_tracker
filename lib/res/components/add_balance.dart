@@ -29,10 +29,10 @@ class AddBalance extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.greenColor.withOpacity(0.5),
+          color: AppColors.redColor.withOpacity(0.5),
           width: 1,
         ),
-        color: AppColors.greenColor.withOpacity(0.05),
+        color: AppColors.redColor.withOpacity(0.05),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +41,7 @@ class AddBalance extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                icon:  Icon(Icons.add_circle, color: Colors.green, size: 28),
+                icon:  Icon(Icons.add_circle, color: Colors.red, size: 28),
                 onPressed: onIconPressed,
               ),
             ],
@@ -58,11 +58,11 @@ class AddBalance extends StatelessWidget {
 
           // Balance
           Text(
-            "\$${balance.toStringAsFixed(2)}",
+            "\ Rs ${balance.toStringAsFixed(2)}",
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.green,
+              color: Colors.red,
             ),
           ),
         ],

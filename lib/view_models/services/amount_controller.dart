@@ -1,55 +1,114 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
-class Expanse {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Create wallet if not exists
-  Future<void> createWallet(String uid, double salary) async {
-    final walletRef = _db.collection('users').doc(uid).collection('wallet').doc('data');
-    final snap = await walletRef.get();
+class AmountService  extends GetxController{
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    if (!snap.exists) {
-      await walletRef.set({
-        'salary': salary,
-        'balance': salary,
-        'totalExpense': 0,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-    }
+  // ✅ Get Available Balance Stream
+  Stream<DocumentSnapshot> getAvailableBalance(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('summary')
+        .doc('availableBalanceDoc')
+        .snapshots();
   }
 
-  // Add Expense
-  Future<void> addExpense(String uid, Map<String, dynamic> expense) async {
-    final walletRef = _db.collection('users').doc(uid).collection('wallet').doc('data');
-    final expenseRef = _db.collection('users').doc(uid).collection('expenses').doc();
+  // ✅ Get Salary Stream
+  Stream<DocumentSnapshot> getSalary(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('salary')
+        .doc('salaryDoc')
+        .snapshots();
+  }
 
-    await _db.runTransaction((txn) async {
-      final walletSnap = await txn.get(walletRef);
-      if (!walletSnap.exists) throw Exception("Wallet not found");
+  // ✅ Get Expense Stream
+  Stream<DocumentSnapshot> getExpenseSummary(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('summary')
+        .doc('expenseDoc')
+        .snapshots();
+  }
 
-      double balance = walletSnap['balance'];
-      double totalExpense = walletSnap['totalExpense'];
-      double expenseAmount = expense['amount'];
+  // ✅ Get Expenses List Stream
+  Stream<QuerySnapshot> getExpenses(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('expenses')
+        .orderBy('createdAt', descending: true)
+        .snapshots();
+  }
 
-      if (balance < expenseAmount) throw Exception("Not enough balance");
+  // ✅ Update Summary (expense + availableBalance)
+  Future<void> updateSummary(String uid, List<QueryDocumentSnapshot> expenses) async {
+    double totalExpense = expenses.fold(
+      0,
+          (sum, doc) => sum + (doc['amount'] as num).toDouble(),
+    );
 
-      // Update wallet
-      txn.update(walletRef, {
-        'balance': balance - expenseAmount,
-        'totalExpense': totalExpense + expenseAmount,
-      });
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('summary')
+        .doc('expenseDoc')
+        .set({
+      'amount': totalExpense,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
 
-      // Add expense
-      txn.set(expenseRef, {
-        ...expense,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+    final balanceSnap = await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('balance')
+        .doc('balanceDoc')
+        .get();
+
+    double totalBalance =
+    balanceSnap.exists ? (balanceSnap['amount'] as num).toDouble() : 0;
+
+    double availableBalance = totalBalance - totalExpense;
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('summary')
+        .doc('availableBalanceDoc')
+        .set({
+      'amount': availableBalance,
+      'updatedAt': FieldValue.serverTimestamp(),
     });
   }
 
-  // Update Expense
-  Future<void> updateExpense(String uid, String docId, Map<String, dynamic> updatedData) async {
-    final expenseRef = _db.collection('users').doc(uid).collection('expenses').doc(docId);
-    await expenseRef.update(updatedData);
+  // ✅ Update Balance
+  Future<void> updateBalance(String uid, double balance) async {
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('balance')
+        .doc('balanceDoc')
+        .set({
+      'amount': balance,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // ✅ Update Salary
+  Future<void> updateSalary(String uid, double salary) async {
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('salary')
+        .doc('salaryDoc')
+        .set({
+      'amount': salary,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }
+

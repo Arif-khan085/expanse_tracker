@@ -74,6 +74,9 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                     var docId = expenses[index].id;
 
                     return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                       margin: const EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 10,

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class ExpenseService {
+class AmountService {
   Future<void> clearAllData() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;

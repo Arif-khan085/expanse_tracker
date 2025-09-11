@@ -4,8 +4,8 @@ class BalanceItem extends StatelessWidget {
   final String title;
   final double amount;
   final Color color;
-  final IconData icon; // required icon
-  final VoidCallback onIconPressed; // required button action
+  final IconData? icon; // optional icon
+  final VoidCallback? onIconPressed; // optional button action
   final String? footerText; // bottom text
   final List<IconData>? footerIcons; // bottom icons
 
@@ -14,8 +14,8 @@ class BalanceItem extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.color,
-    required this.icon, // required
-    required this.onIconPressed, // required
+    this.icon, // optional
+    this.onIconPressed, // optional
     this.footerText,
     this.footerIcons,
   });
@@ -42,12 +42,14 @@ class BalanceItem extends StatelessWidget {
           // ─── Top part ───
           Row(
             children: [
-              // Required IconButton
-              IconButton(
-                icon: Icon(icon, size: 28, color: color),
-                onPressed: onIconPressed,
-              ),
-              const SizedBox(width: 16),
+              // Show IconButton only if icon is provided
+              if (icon != null)
+                IconButton(
+                  icon: Icon(icon, size: 28, color: color),
+                  onPressed: onIconPressed,
+                ),
+
+              if (icon != null) const SizedBox(width: 16),
 
               // Text content
               Expanded(
@@ -62,7 +64,7 @@ class BalanceItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\$${amount.toStringAsFixed(2)}',
+                      '\ Rs ${amount.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
