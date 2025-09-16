@@ -22,12 +22,12 @@ class SettingsView extends StatelessWidget {
           ListTile(title: Text("App Preferences".tr, style: TextStyle(fontWeight: FontWeight.bold))),
 
           Obx(() => ListTile(
-            title: Text("Theme Mode"),
+            title: Text("Theme Mode".tr),
             subtitle: Text(controller.themeMode.value == 0
-                ? "System Default"
+                ? "System Default".tr
                 : controller.themeMode.value == 1
-                ? "Light"
-                : "Dark"),
+                ? "Light".tr
+                : "Dark".tr),
             trailing: DropdownButton<int>(
               value: controller.themeMode.value,
               items: const [
@@ -50,8 +50,8 @@ class SettingsView extends StatelessWidget {
               onChanged: (val) => controller.changeLanguage(val!),
             ),
           )),
-
           */
+
           Obx(() => ListTile(
             title: Text("Language"),
             subtitle: Text(controller.selectedLanguage.value),
@@ -63,7 +63,6 @@ class SettingsView extends StatelessWidget {
               onChanged: (val) => controller.changeLanguage(val!),
             ),
           )),
-
 
           Divider(),
 

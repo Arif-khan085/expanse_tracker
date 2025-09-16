@@ -20,7 +20,13 @@ class AppTranslations extends Translations {
       'contact_support': 'Contact Support',
       'logout': 'Logout',
       "Daily Expense Summary" : "Daily Expense Summary",
-      'Data Management' : 'Data Management"'
+      'Data Management' : 'Data Management"',
+      'App Preferences' : 'App Preferences',
+      'Theme Mode':'Theme Mode',
+      'System Default':'System Default',
+      'Light':'Light',
+      'Dark':'Dark',
+
     },
     'ur_PK': {
       'home_title': 'ہوم',
@@ -40,6 +46,12 @@ class AppTranslations extends Translations {
       'logout': 'لاگ آؤٹ',
       "Daily Expense Summary" : "روزانہ خرچ کا خلاصہ",
       'Data Management' : 'ڈیٹا مینجمنٹ"',
+      'App Preferences':'ایپ کی ترجیحات',
+      'Theme Mode':'تھیم موڈ',
+      'System Default':'تھیم موڈ',
+      'Light':'روشنی',
+      'Dark':'اندھیرا',
+
     }
   };
 }

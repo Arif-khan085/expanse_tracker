@@ -135,17 +135,70 @@ class _MonthlyRecordState extends State<MonthlyRecord> {
                         ...monthExpenses.map((doc) {
                           var exp = doc.data() as Map<String, dynamic>;
                           return Card(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 5,
+                            shadowColor: Colors.black26,
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             child: ListTile(
-                              title: Text(exp['title'] ?? 'No Title'),
-                              subtitle: Text(
-                                "Category: ${exp['category'] ?? 'N/A'}\n"
-                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+
+                              // 🔹 Leading Icon
+                              leading: Container(
+                                width: 46,
+                                height: 46,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade100,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(
+                                  Icons.category, // later map to category icon
+                                  color: Colors.blue.shade700,
+                                  size: 24,
+                                ),
                               ),
-                              trailing: Text("Rs ${exp['amount'] ?? 0}"),
+
+                              // 🔹 Title
+                              title: Text(
+                                exp['title'] ?? 'No Title',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              // 🔹 Subtitle
+                              subtitle: Text(
+                                "Category: ${exp['category'] ?? 'N/A'} • "
+                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+
+                              // 🔹 Trailing (Amount inside pill)
+                              trailing: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: (exp['amount'] ?? 0) >= 0
+                                      ? Colors.green.shade50
+                                      : Colors.red.shade50,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "Rs ${exp['amount'] ?? 0}",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: (exp['amount'] ?? 0) >= 0 ? Colors.green : Colors.red,
+                                  ),
+                                ),
+                              ),
                             ),
                           );
+
                         }).toList(),
                       ],
                     );

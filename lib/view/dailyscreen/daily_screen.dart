@@ -142,17 +142,73 @@ class _DailyRecordState extends State<DailyRecord> {
                         ...dayExpenses.map((doc) {
                           var exp = doc.data() as Map<String, dynamic>;
                           return Card(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 5),
-                            child: ListTile(
-                              title: Text(exp['title'] ?? 'No Title'),
-                              subtitle: Text(
-                                "Category: ${exp['category'] ?? 'N/A'}\n"
-                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 4,
+                            shadowColor: Colors.black26,
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // 🔹 Category Icon Box
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      Icons.category, // you can map category to a specific icon
+                                      color: Colors.blue.shade700,
+                                      size: 26,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 12),
+
+                                  // 🔹 Expense Details
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          exp['title'] ?? 'No Title',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "Category: ${exp['category'] ?? 'N/A'} • "
+                                              "Payment: ${exp['payment'] ?? 'N/A'}",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // 🔹 Amount
+                                  Text(
+                                    "Rs ${exp['amount'] ?? 0}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: (exp['amount'] ?? 0) >= 0 ? Colors.green : Colors.red,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              trailing: Text("Rs ${exp['amount'] ?? 0}"),
                             ),
                           );
+
                         }).toList(),
                       ],
                     );

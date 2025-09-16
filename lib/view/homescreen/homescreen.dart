@@ -188,27 +188,80 @@ class _HomeScreenState extends State<HomeScreen> {
                           limitedExpenses[index].data() as Map<String, dynamic>;
 
                           return Card(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: ListTile(
-                              title: Text(exp['title'] ?? 'No Title'),
-                              subtitle: Text(
-                                "Category: ${exp['category']}\n"
-                                    "Payment: ${exp['payment']}\n"
-                                    "Date: ${exp['date']}",
-                              ),
-                              trailing: Text(
-                                "Rs ${exp['amount']}",
-                                style: const TextStyle(
+                            elevation: 6,
+                            shadowColor: Colors.black26,
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // 🔹 Category Icon Box
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Icon(
+                                      Icons.shopping_bag, // (you can map category to icons)
+                                      color: Colors.blue,
+                                      size: 28,
+                                    ),
+                                  ),
 
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
-                                ),
+                                  const SizedBox(width: 12),
+
+                                  // 🔹 Expense Details (Title, Category, Date, Payment)
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          exp['title'] ?? 'No Title',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "${exp['category']} • ${exp['payment']}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          exp['date'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // 🔹 Amount
+                                  Text(
+                                    "Rs ${exp['amount']}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: exp['amount'] >= 0 ? Colors.green : Colors.red,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
+
                         },
                       ),
                     ),

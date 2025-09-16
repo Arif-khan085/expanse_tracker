@@ -140,17 +140,81 @@ class _WeeklyRecordState extends State<WeeklyRecord> {
                         ...weekExpenses.map((doc) {
                           var exp = doc.data() as Map<String, dynamic>;
                           return Card(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 5),
-                            child: ListTile(
-                              title: Text(exp['title'] ?? 'No Title'),
-                              subtitle: Text(
-                                "Category: ${exp['category'] ?? 'N/A'}\n"
-                                    "Payment: ${exp['payment'] ?? 'N/A'}",
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 5,
+                            shadowColor: Colors.black26,
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              child: Row(
+                                children: [
+                                  // 🔹 Left Icon (based on category)
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: Colors.teal.shade100,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      Icons.receipt_long, // later map this dynamically
+                                      color: Colors.teal.shade700,
+                                      size: 26,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 12),
+
+                                  // 🔹 Expense Details (Title, Category, Payment)
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          exp['title'] ?? 'No Title',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "Category: ${exp['category'] ?? 'N/A'} • "
+                                              "Payment: ${exp['payment'] ?? 'N/A'}",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // 🔹 Right side (Amount)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: (exp['amount'] ?? 0) >= 0
+                                          ? Colors.green.shade50
+                                          : Colors.red.shade50,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      "Rs ${exp['amount'] ?? 0}",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: (exp['amount'] ?? 0) >= 0 ? Colors.green : Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              trailing: Text("Rs ${exp['amount'] ?? 0}"),
                             ),
                           );
+
                         }).toList(),
                       ],
                     );
