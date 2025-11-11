@@ -23,7 +23,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cardColor,
-        title: const Text("All Expenses"),
+        title: Text("All Expenses"),
       ),
       body: Column(
         children: [
@@ -64,7 +64,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                 }).toList();
 
                 if (expenses.isEmpty) {
-                  return const Center(child: Text('No matching expenses'));
+                  return Center(child: Text('No matching expenses'));
                 }
 
                 return ListView.builder(
@@ -79,7 +79,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                       ),
                       elevation: 6,
                       shadowColor: Colors.black26,
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
@@ -93,14 +93,14 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                                 color: Colors.blue.shade100,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.shopping_bag,
                                 color: Colors.blue,
                                 size: 28,
                               ),
                             ),
 
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
 
                             // 🔹 Expense Details (Title, Category, Date, Payment)
                             Expanded(
@@ -109,12 +109,12 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                                 children: [
                                   Text(
                                     exp['title'] ?? 'No Title',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     "${exp['category']} • ${exp['payment']}",
                                     style: TextStyle(
@@ -122,7 +122,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                                       color: Colors.grey.shade700,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     exp['date'] ?? '',
                                     style: TextStyle(
@@ -150,13 +150,13 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                                      icon: Icon(Icons.edit, color: Colors.blue, size: 20),
                                       onPressed: () {
                                         _showEditDialog(context, expenseController, docId, exp);
                                       },
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                                      icon:Icon(Icons.delete, color: Colors.red, size: 20),
                                       onPressed: () {
                                         _showDeleteDialog(context, expenseController, docId);
                                       },
@@ -232,22 +232,22 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Edit Expense"),
+          title: Text("Edit Expense"),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                   controller: titleController,
-                  decoration: const InputDecoration(labelText: "Title"),
+                  decoration: InputDecoration(labelText: "Title"),
                 ),
                 TextField(
                   controller: amountController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: "Amount"),
+                  decoration: InputDecoration(labelText: "Amount"),
                 ),
                 DropdownButtonFormField<String>(
                   value: selectedCategory,
-                  decoration: const InputDecoration(labelText: "Category"),
+                  decoration: InputDecoration(labelText: "Category"),
                   items: categories.map((String category) {
                     return DropdownMenuItem(
                       value: category,
@@ -260,7 +260,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                 ),
                 DropdownButtonFormField<String>(
                   value: selectedPayment,
-                  decoration: const InputDecoration(labelText: "Payment"),
+                  decoration:InputDecoration(labelText: "Payment"),
                   items: payment.map((String p) {
                     return DropdownMenuItem(value: p, child: Text(p));
                   }).toList(),
@@ -274,7 +274,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
+              child: Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -288,7 +288,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                 controller.updateExpense(docId, updatedData);
                 Navigator.pop(context);
               },
-              child: const Text("Update"),
+              child: Text("Update"),
             ),
           ],
         );
@@ -302,12 +302,12 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Delete Expense"),
-          content: const Text("Are you sure you want to delete this expense?"),
+          title: Text("Delete Expense"),
+          content: Text("Are you sure you want to delete this expense?"),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
+              child:Text("Cancel"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -315,7 +315,7 @@ class _AllExpensesScreenState extends State<AllExpensesScreen> {
                 controller.deleteExpense(docId);
                 Navigator.pop(context);
               },
-              child: const Text("Delete"),
+              child: Text("Delete"),
             ),
           ],
         );
