@@ -53,7 +53,7 @@ class SettingsView extends StatelessWidget {
           */
 
           Obx(() => ListTile(
-            title: Text("Language"),
+            title: Text("Language".tr),
             subtitle: Text(controller.selectedLanguage.value),
             trailing: DropdownButton<String>(
               value: controller.selectedLanguage.value,

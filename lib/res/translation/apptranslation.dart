@@ -26,6 +26,9 @@ class AppTranslations extends Translations {
       'System Default':'System Default',
       'Light':'Light',
       'Dark':'Dark',
+      'Language':'Language',
+      'Enable Reminders':''
+
 
     },
     'ur_PK': {
@@ -51,6 +54,7 @@ class AppTranslations extends Translations {
       'System Default':'تھیم موڈ',
       'Light':'روشنی',
       'Dark':'اندھیرا',
+      'Language':'زبان',
 
     }
   };

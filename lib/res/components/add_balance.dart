@@ -19,8 +19,8 @@ class AddBalance extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.17,
       width: MediaQuery.of(context).size.width * 1,
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 3,vertical: 9),
+      padding: const EdgeInsets.only(left: 10,right: 10),
       decoration: BoxDecoration(
         gradient: const RadialGradient(
           colors: [Colors.green, Colors.red],

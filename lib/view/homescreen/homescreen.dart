@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Center(child: CircularProgressIndicator()),
       );
     }
-
     return Scaffold(
       bottomNavigationBar: CustomNavigationBar(
         selectIndex: 0,
@@ -69,208 +68,210 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: const Text('Home'),
       ),
-      body: Column(
-        children: [
-          // ✅ Available Balance
-          StreamBuilder<DocumentSnapshot>(
-            stream: controller.getAvailableBalance(uid!),
-            builder: (context, snapshot) {
-              double availableBalance = 0;
-              if (snapshot.hasData && snapshot.data!.exists) {
-                availableBalance =
-                    (snapshot.data!['amount'] as num).toDouble();
-              }
-              return AddBalance(
-                title: 'Available Balance',
-                balance: availableBalance,
-                icon: Icons.edit,
-                onIconPressed: () async {
-                  final balSnap = await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .collection('balance')
-                      .doc('balanceDoc')
-                      .get();
-
-                  double currentBalance =
-                  balSnap.exists ? (balSnap['amount'] as num).toDouble() : 0;
-
-                  _showEditBalanceDialog(currentBalance);
-                },
-              );
-            },
-          ),
-
-          // ✅ Salary + Expense Row
-          Row(
-            children: [
-              Expanded(
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: controller.getSalary(uid!),
-                  builder: (context, snapshot) {
-                    double salary = 0;
-                    if (snapshot.hasData && snapshot.data!.exists) {
-                      salary = (snapshot.data!['amount'] as num).toDouble();
-                    }
-
-                    return BalanceItem(
-                      footerText: 'Enter Salary',
-                      title: 'Salary',
-                      amount: salary,
-                      color: AppColors.tealColor,
-                      icon: Icons.edit,
-                      onIconPressed: () {
-                        _showEditSalaryDialog(salary);
-                      },
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: controller.getExpenseSummary(uid!),
-                  builder: (context, snapshot) {
-                    double totalExpense = 0;
-                    if (snapshot.hasData && snapshot.data!.exists) {
-                      totalExpense =
-                          (snapshot.data!['amount'] as num).toDouble();
-                    }
-
-                    return BalanceItem(
-                      footerIcons: [Icons.arrow_upward],
-                      title: 'Expense',
-                      amount: totalExpense,
-                      color: AppColors.blueColor,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-
-          // 📌 Expense list
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: controller.getExpenses(uid!),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        child: Column(
+          children: [
+            // ✅ Available Balance
+            StreamBuilder<DocumentSnapshot>(
+              stream: controller.getAvailableBalance(uid!),
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No Expense Found'));
+                double availableBalance = 0;
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  availableBalance =
+                      (snapshot.data!['amount'] as num).toDouble();
                 }
+                return AddBalance(
+                  title: 'Available Balance',
+                  balance: availableBalance,
+                  icon: Icons.edit,
+                  onIconPressed: () async {
+                    final balSnap = await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(uid)
+                        .collection('balance')
+                        .doc('balanceDoc')
+                        .get();
 
-                final expenses = snapshot.data!.docs;
-                final limitedExpenses =
-                expenses.length > 5 ? expenses.sublist(0, 5) : expenses;
+                    double currentBalance =
+                    balSnap.exists ? (balSnap['amount'] as num).toDouble() : 0;
 
-                // ✅ Auto update summary
-                controller.updateSummary(uid!, expenses);
-
-                return Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (expenses.length > 5)
-                          TextButton(
-                            onPressed: () {
-                              Get.to(() => AllExpensesScreen(uid: uid!));
-                            },
-                            child: const Text("See All"),
-                          ),
-                      ],
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: limitedExpenses.length,
-                        itemBuilder: (context, index) {
-                          var exp =
-                          limitedExpenses[index].data() as Map<String, dynamic>;
-
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 6,
-                            shadowColor: Colors.black26,
-                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // 🔹 Category Icon Box
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue.shade100,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Icon(
-                                      Icons.shopping_bag, // (you can map category to icons)
-                                      color: Colors.blue,
-                                      size: 28,
-                                    ),
-                                  ),
-
-                                  const SizedBox(width: 12),
-
-                                  // 🔹 Expense Details (Title, Category, Date, Payment)
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          exp['title'] ?? 'No Title',
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "${exp['category']} • ${exp['payment']}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey.shade700,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          exp['date'] ?? '',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey.shade500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // 🔹 Amount
-                                  Text(
-                                    "Rs ${exp['amount']}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: exp['amount'] >= 0 ? Colors.green : Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-
-                        },
-                      ),
-                    ),
-                  ],
+                    _showEditBalanceDialog(currentBalance);
+                  },
                 );
               },
             ),
-          ),
-        ],
+
+            // ✅ Salary + Expense Row
+            Row(
+              children: [
+                Expanded(
+                  child: StreamBuilder<DocumentSnapshot>(
+                    stream: controller.getSalary(uid!),
+                    builder: (context, snapshot) {
+                      double salary = 0;
+                      if (snapshot.hasData && snapshot.data!.exists) {
+                        salary = (snapshot.data!['amount'] as num).toDouble();
+                      }
+                      return BalanceItem(
+                        footerText: 'Enter Salary',
+                        title: 'Salary',
+                        amount: salary,
+                        color: AppColors.tealColor,
+                        icon: Icons.edit,
+                        onIconPressed: () {
+                          _showEditSalaryDialog(salary);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: StreamBuilder<DocumentSnapshot>(
+                    stream: controller.getExpenseSummary(uid!),
+                    builder: (context, snapshot) {
+                      double totalExpense = 0;
+                      if (snapshot.hasData && snapshot.data!.exists) {
+                        totalExpense =
+                            (snapshot.data!['amount'] as num).toDouble();
+                      }
+
+                      return BalanceItem(
+                        footerIcons: [Icons.arrow_upward],
+                        title: 'Expense',
+                        amount: totalExpense,
+                        color: AppColors.blueColor,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            // 📌 Expense list
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: controller.getExpenses(uid!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No Expense Found'));
+                  }
+
+                  final expenses = snapshot.data!.docs;
+                  final limitedExpenses =
+                  expenses.length > 5 ? expenses.sublist(0, 5) : expenses;
+
+                  // ✅ Auto update summary
+                  controller.updateSummary(uid!, expenses);
+
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (expenses.length > 5)
+                            TextButton(
+                              onPressed: () {
+                                Get.to(() => AllExpensesScreen(uid: uid!));
+                              },
+                              child: const Text("See All"),
+                            ),
+                        ],
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: limitedExpenses.length,
+                          itemBuilder: (context, index) {
+                            var exp =
+                            limitedExpenses[index].data() as Map<String, dynamic>;
+
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 6,
+                              shadowColor: Colors.black26,
+                              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // 🔹 Category Icon Box
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade100,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(
+                                        Icons.shopping_bag, // (you can map category to icons)
+                                        color: Colors.blue,
+                                        size: 28,
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 12),
+
+                                    // 🔹 Expense Details (Title, Category, Date, Payment)
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            exp['title'] ?? 'No Title',
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "${exp['category']} • ${exp['payment']}",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey.shade700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            exp['date'] ?? '',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    // 🔹 Amount
+                                    Text(
+                                      "Rs ${exp['amount']}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: exp['amount'] >= 0 ? Colors.green : Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
