@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../res/colors/app_colors.dart';
 import '../../res/components/buttomnavigatorbar.dart';
-
 import '../../view_models/services/amount_controller.dart';
 import '../seeallexpense/All_expense.dart';
 
@@ -39,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
 
    //final AmountService = Get.put(AmountService());
   final AmountService controller = Get.put(AmountService());
@@ -261,7 +261,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
-
                           },
                         ),
                       ),
@@ -369,7 +368,6 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 final salary =
                     double.tryParse(salaryController.text.trim()) ?? 0;
-
                 if (salary > 0) {
                   await controller.updateSalary(uid!, salary);
                 }

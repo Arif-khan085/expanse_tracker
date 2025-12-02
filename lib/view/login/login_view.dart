@@ -17,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundColor,
       body: Center(
         child: Column(
@@ -47,7 +48,7 @@ class _LoginViewState extends State<LoginView> {
               },
               color: AppColors.blackColor,
               buttonColor: AppColors.greyColor,
-              textStyle: TextStyle(fontSize: 40, color: AppColors.blackColor),
+              textStyle: TextStyle(fontSize: 18, color: AppColors.blackColor,fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             RoundButton(
@@ -57,7 +58,7 @@ class _LoginViewState extends State<LoginView> {
               },
               color: AppColors.whiteColor,
               buttonColor: AppColors.cardColor,
-              textStyle: TextStyle(fontSize: 30, color: AppColors.blackColor),
+              textStyle: TextStyle(fontSize: 18, color: AppColors.whiteColor,fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 100),
             Text(
@@ -68,7 +69,6 @@ class _LoginViewState extends State<LoginView> {
                 fontStyle: FontStyle.italic,
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

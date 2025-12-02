@@ -13,6 +13,8 @@ class RoundButton extends StatelessWidget {
     this.height = 55,
     this.loading = false,
     required this.color,
+
+
   });
   final TextStyle? textStyle;
   final Color color;
@@ -39,7 +41,7 @@ class RoundButton extends StatelessWidget {
               ? Center(child: CircularProgressIndicator())
               : Center(
             child: title is String
-            ? Text(
+                ? Text(
               title,
               style:
               textStyle ??
@@ -49,7 +51,7 @@ class RoundButton extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             )
-          :title,
+                :title,
           ),
         ),
       ),

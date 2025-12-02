@@ -164,7 +164,7 @@ class _SignUpState extends State<SignUp> {
                               'assets/images/google_logo.png',
                             ),
                             onPress: () {},
-                            color: AppColors.whiteColor,
+                            color: AppColors.whiteColor, textStyle: null,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
