@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
    //final AmountService = Get.put(AmountService());
   final AmountService controller = Get.put(AmountService());
+
   @override
   Widget build(BuildContext context) {
     if (uid == null) {

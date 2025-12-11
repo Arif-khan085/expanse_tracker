@@ -15,7 +15,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: AppColors.cardColor,
-          title: Text("Settings",style: TextStyle(color: AppColors.whiteColor),)),
+          title: Text("Settings".tr,style: TextStyle(color: AppColors.whiteColor),)),
       body: ListView(
         children: [
           // ---------- App Preferences ----------

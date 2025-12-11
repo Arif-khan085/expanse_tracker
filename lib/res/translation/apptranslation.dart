@@ -19,15 +19,17 @@ class AppTranslations extends Translations {
       'rate_us': 'Rate Us',
       'contact_support': 'Contact Support',
       'logout': 'Logout',
-      "Daily Expense Summary" : "Daily Expense Summary",
-      'Data Management' : 'Data Management"',
-      'App Preferences' : 'App Preferences',
-      'Theme Mode':'Theme Mode',
-      'System Default':'System Default',
-      'Light':'Light',
-      'Dark':'Dark',
-      'Language':'Language',
-      'Enable Reminders':''
+      "daily Expense Summary" : "Daily Expense Summary",
+      'data Management' : 'Data Management"',
+      'app Preferences' : 'App Preferences',
+      'theme Mode':'Theme Mode',
+      'system Default':'System Default',
+      'light':'Light',
+      'dark':'Dark',
+      'language':'Language',
+      'enable Reminders':'Enable Reminders',
+      'budget Limit Alerts':'Budget Limit Alerts',
+      'system Default':'System Default',
 
 
     },
@@ -55,7 +57,8 @@ class AppTranslations extends Translations {
       'Light':'روشنی',
       'Dark':'اندھیرا',
       'Language':'زبان',
-
+      'enable Reminders':'یاد دہانیوں کو فعال کریں',
+      'budget Limit Alerts':'جٹ کی حد کے انتباہات',
     }
   };
 }
