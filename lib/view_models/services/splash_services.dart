@@ -1,22 +1,25 @@
-import 'dart:async';
 
-import 'package:expense_tracker/view/homescreen/homescreen.dart';
-import 'package:expense_tracker/view/login/login_view.dart';
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../view/homescreen/homescreen.dart';
+import '../../view/login/login_view.dart';
 
 class SplashServices {
-  final _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void isLogin() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     final user = _auth.currentUser;
+
     if (user != null) {
-      Get.to(HomeScreen());
+      /// User already logged in
+      Get.offAll(() => HomeScreen());
     } else {
-      Get.to(LoginView());
+      /// User not logged in
+      Get.offAll(() => LoginView());
     }
   }
 }
